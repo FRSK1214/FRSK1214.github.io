@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slot Countdown 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&family=Noto+Sans+JP:wght@400;900&display=swap');
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            background: radial-gradient(circle at center, #2c3e50 0%, #000000 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            overflow: hidden;
+            color: white;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 3rem;
+            padding: 4rem 2rem;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        }
+
+        /* Slot Machine Effect */
+        .slot-container {
+            display: flex;
+            gap: 1rem;
+            perspective: 1000px;
+        }
+
+        .slot-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .slot-window {
+            height: 80px;
+            overflow: hidden;
+            background: #1a1a1a;
+            border-radius: 12px;
+            border: 2px solid #444;
+            position: relative;
+            box-shadow: inset 0 0 20px rgba(0,0,0,1);
+        }
+
+        @media (min-width: 768px) {
+            .slot-window { height: 120px; width: 100px; }
+        }
+
+        .slot-reel {
+            transition: transform 0.5s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slot-digit {
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        @media (min-width: 768px) {
+            .slot-digit { height: 120px; font-size: 5rem; }
+        }
+
+        .label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #aaa;
+            margin-top: 1rem;
+            font-weight: bold;
+            letter-spacing: 0.2em;
+        }
+
+        .highlight {
+            color: #ffde59;
+            text-shadow: 0 0 15px rgba(255, 222, 89, 0.5);
+        }
+
+        #message {
+            font-weight: 900;
+            background: linear-gradient(to bottom, #fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 3rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container mx-auto px-4 text-center">
+        <div class="glass-card max-w-5xl mx-auto">
+            <h1 id="message" class="text-3xl md:text-5xl">MISSION TO 2026</h1>
+            
+            <div class="slot-container justify-center">
+                <!-- Days -->
+                <div class="slot-group">
+                    <div class="slot-window">
+                        <div id="days-reel" class="slot-reel">
+                            <div class="slot-digit">000</div>
+                        </div>
+                    </div>
+                    <div class="label">Days</div>
+                </div>
+
+                <div class="text-4xl md:text-6xl self-center mb-6">:</div>
+
+                <!-- Hours -->
+                <div class="slot-group">
+                    <div class="slot-window">
+                        <div id="hours-reel" class="slot-reel">
+                            <div class="slot-digit">00</div>
+                        </div>
+                    </div>
+                    <div class="label">Hours</div>
+                </div>
+
+                <div class="text-4xl md:text-6xl self-center mb-6">:</div>
+
+                <!-- Minutes -->
+                <div class="slot-group">
+                    <div class="slot-window">
+                        <div id="minutes-reel" class="slot-reel">
+                            <div class="slot-digit">00</div>
+                        </div>
+                    </div>
+                    <div class="label">Min</div>
+                </div>
+
+                <div class="text-4xl md:text-6xl self-center mb-6">:</div>
+
+                <!-- Seconds -->
+                <div class="slot-group">
+                    <div class="slot-window">
+                        <div id="seconds-reel" class="slot-reel highlight">
+                            <div class="slot-digit">00</div>
+                        </div>
+                    </div>
+                    <div class="label">Sec</div>
+                </div>
+            </div>
+
+            <div class="mt-16 text-gray-500 tracking-widest text-sm">
+                TARGET: 2026.01.01 00:00:00
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let lastTime = {};
+
+        function updateSlot(id, value) {
+            const reel = document.getElementById(id + '-reel');
+            if (!reel) return;
+
+            const stringValue = String(value).padStart(id === 'days' ? 3 : 2, '0');
+            
+            // 初回実行時
+            if (lastTime[id] === undefined) {
+                reel.firstElementChild.innerText = stringValue;
+                lastTime[id] = stringValue;
+                return;
+            }
+
+            if (lastTime[id] !== stringValue) {
+                const currentDigit = reel.firstElementChild;
+                if (!currentDigit) return;
+
+                const nextDigit = document.createElement('div');
+                nextDigit.className = 'slot-digit';
+                nextDigit.innerText = stringValue;
+                
+                reel.appendChild(nextDigit);
+                
+                const height = currentDigit.offsetHeight;
+                reel.style.transition = 'transform 0.5s cubic-bezier(0.45, 0.05, 0.55, 0.95)';
+                reel.style.transform = `translateY(-${height}px)`;
+                
+                // アニメーション終了後のクリーンアップ
+                setTimeout(() => {
+                    // 要素がまだ親（reel）の子であることを確認してから削除
+                    if (currentDigit.parentNode === reel) {
+                        reel.style.transition = 'none';
+                        reel.removeChild(currentDigit);
+                        reel.style.transform = 'translateY(0)';
+                    }
+                }, 500);
+
+                lastTime[id] = stringValue;
+            }
+        }
+
+        function updateCountdown() {
+            const targetDate = new Date('January 1, 2026 00:00:00').getTime();
+            const now = new Date().getTime();
+            const difference = targetDate - now;
+
+            if (difference <= 0) {
+                document.getElementById('message').innerText = "HAPPY NEW YEAR 2026";
+                // タイマーを0で停止
+                updateSlot('days', 0);
+                updateSlot('hours', 0);
+                updateSlot('minutes', 0);
+                updateSlot('seconds', 0);
+                return;
+            }
+
+            const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+            updateSlot('days', days);
+            updateSlot('hours', hours);
+            updateSlot('minutes', minutes);
+            updateSlot('seconds', seconds);
+        }
+
+        // 1秒ごとに更新
+        setInterval(updateCountdown, 1000);
+        
+        // 初回実行
+        window.addEventListener('load', () => {
+            updateCountdown();
+        });
+    </script>
+</body>
+</html>
