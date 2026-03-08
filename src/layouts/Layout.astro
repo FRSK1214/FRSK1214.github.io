@@ -1,24 +1,14 @@
 ---
-interface Props {
-	title: string;
-}
-const { title } = Astro.props;
+import '../styles/global.css';
 ---
-
 <!doctype html>
 <html lang="ja">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<title>{title}</title>
+		<title>My Creative Hub</title>
 	</head>
-	<body>
+	<body class="bg-black">
 		<slot />
 	</body>
 </html>
-
-<style is:global>
-	:root { background: #050505; }
-	html { font-family: system-ui, sans-serif; }
-</style>

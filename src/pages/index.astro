@@ -2,56 +2,31 @@
 import Layout from '../layouts/Layout.astro';
 import DownloadCard from '../components/DownloadCard';
 import YoutubeSection from '../components/YoutubeSection';
+import '../styles/global.css';
 ---
 
 <Layout title="My Creative Hub">
-	<main class="relative min-h-screen bg-[#050505] text-white selection:bg-white/20 px-6 py-20">
-		<div class="fixed inset-0 overflow-hidden pointer-events-none">
-			<div class="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] rounded-full bg-blue-500/10 blur-[120px]"></div>
-			<div class="absolute top-[20%] -right-[10%] w-[30%] h-[50%] rounded-full bg-red-500/5 blur-[100px]"></div>
-		</div>
+  <main class="min-h-screen bg-black text-white px-6 py-20">
+    <div class="max-w-4xl mx-auto">
+      <header class="mb-12">
+        <h1 class="text-6xl font-bold tracking-tighter uppercase text-white">
+          Archive 01
+        </h1>
+      </header>
 
-		<div class="max-w-4xl mx-auto relative z-10">
-			<header class="mb-24 space-y-4">
-				<h1 class="text-5xl md:text-7xl font-light tracking-tighter uppercase">
-					Archive <span class="text-white/30">01</span>
-				</h1>
-				<p class="text-sm text-white/50 font-mono tracking-widest uppercase italic">
-					// Digital Assets & Sound Works
-				</p>
-			</header>
-
-			<div class="grid gap-16">
-				<section>
-					<h2 class="text-xs font-bold tracking-widest text-white/40 uppercase mb-8 border-l border-white/20 pl-4">Featured Video</h2>
-					<YoutubeSection client:load videoId="あなたの動画ID" />
-				</section>
-
-				<section>
-					<h2 class="text-xs font-bold tracking-widest text-white/40 uppercase mb-8 border-l border-white/20 pl-4">Downloads</h2>
-					<div class="grid md:grid-cols-2 gap-4">
-						<DownloadCard 
-							client:load 
-							title="Piano Composition 01" 
-							type="MIDI" 
-							description="Standard MIDI File for production."
-							link="/downloads/track1.mid"
-						/>
-						<DownloadCard 
-							client:load 
-							title="Custom Tool v1.0" 
-							type="SOFTWARE" 
-							description="Windows/macOS utility tool."
-							link="/downloads/tool.zip"
-						/>
-					</div>
-				</section>
-			</div>
-		</div>
-	</main>
+      <div class="grid gap-12">
+        <YoutubeSection client:load videoId="Kwr1VIp4nLw" />
+        
+        <div class="grid md:grid-cols-2 gap-6">
+          <DownloadCard 
+            client:load 
+            title="Piano MIDI" 
+            type="MIDI" 
+            description="Download the latest track."
+            link="#"
+          />
+        </div>
+      </div>
+    </div>
+  </main>
 </Layout>
-
-<style is:global>
-	@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;400;700&display=swap');
-	body { font-family: 'Inter', sans-serif; }
-</style>
