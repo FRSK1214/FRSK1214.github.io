@@ -4,12 +4,9 @@ import react from '@astrojs/react';
 
 export default defineConfig({
   site: 'https://FRSK1214.github.io',
-  
   output: 'static',
-
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
   },
-
-  integrations: [react()]
+  integrations: [react()],
 });
