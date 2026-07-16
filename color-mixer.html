@@ -1,0 +1,260 @@
+:Color Mixer:color_mixer.html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>色の三原色 ＆ 白 ミキサー</title>
+    <!-- Tailwind CSS (for modern UI styling) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* スライダーのカスタムスタイル */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            cursor: pointer;
+        }
+        input[type="range"]::-webkit-slider-runnable-track {
+            background: #e5e7eb;
+            border-radius: 9999px;
+            height: 8px;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            margin-top: -6px;
+            background-color: #374151;
+            border-radius: 9999px;
+            height: 20px;
+            width: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            transition: transform 0.1s ease;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex items-center justify-center p-4">
+
+    <div class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 w-full max-w-lg transition-all duration-300">
+        
+        <!-- ヘッダー -->
+        <div class="text-center mb-6">
+            <h1 class="text-2xl font-bold text-slate-800">色の三原色と白のミキサー</h1>
+            <p class="text-xs text-slate-500 mt-1">シアン(C)・マゼンタ(M)・イエロー(Y)・白(W)を混ぜてみよう</p>
+        </div>
+
+        <!-- プレビュー＆パレット部 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <!-- メインプレビュー -->
+            <div class="flex flex-col items-center">
+                <div id="colorPreview" class="w-full h-40 rounded-2xl shadow-inner border border-slate-200 transition-colors duration-100 relative overflow-hidden flex items-end justify-center pb-3">
+                    <!-- 色情報表示（オーバーレイ） -->
+                    <div class="bg-black/60 backdrop-blur-sm text-white px-3 py-1.5 rounded-xl text-center text-xs space-y-0.5">
+                        <div id="hexValue" class="font-mono font-bold tracking-wider">#FFFFFF</div>
+                        <div id="rgbValue" class="font-mono text-[10px] text-slate-300">rgb(255, 255, 255)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- カラーサンプル & 学習ミニコーナー -->
+            <div class="bg-slate-50 rounded-2xl p-4 flex flex-col justify-between border border-slate-100">
+                <div>
+                    <h3 class="text-xs font-bold text-slate-700 mb-2">おすすめブレンドレシピ</h3>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <button onclick="applyPreset(100, 0, 0, 0)" class="flex items-center space-x-1 p-1 hover:bg-white rounded border border-transparent hover:border-slate-200 text-left">
+                            <span class="w-3 h-3 rounded-full bg-[#00A0E9]"></span>
+                            <span class="text-slate-600">シアン (100%)</span>
+                        </button>
+                        <button onclick="applyPreset(0, 100, 0, 0)" class="flex items-center space-x-1 p-1 hover:bg-white rounded border border-transparent hover:border-slate-200 text-left">
+                            <span class="w-3 h-3 rounded-full bg-[#E4007F]"></span>
+                            <span class="text-slate-600">赤紫 (100%)</span>
+                        </button>
+                        <button onclick="applyPreset(0, 0, 100, 0)" class="flex items-center space-x-1 p-1 hover:bg-white rounded border border-transparent hover:border-slate-200 text-left">
+                            <span class="w-3 h-3 rounded-full bg-[#F9E100]"></span>
+                            <span class="text-slate-600">黄色 (100%)</span>
+                        </button>
+                        <button onclick="applyPreset(100, 100, 0, 0)" class="flex items-center space-x-1 p-1 hover:bg-white rounded border border-transparent hover:border-slate-200 text-left">
+                            <span class="w-3 h-3 rounded-full bg-[#0000FF]"></span>
+                            <span class="text-slate-600">青 (C+M)</span>
+                        </button>
+                        <button onclick="applyPreset(0, 100, 100, 0)" class="flex items-center space-x-1 p-1 hover:bg-white rounded border border-transparent hover:border-slate-200 text-left">
+                            <span class="w-3 h-3 rounded-full bg-[#FF0000]"></span>
+                            <span class="text-slate-600">赤 (M+Y)</span>
+                        </button>
+                        <button onclick="applyPreset(100, 0, 100, 0)" class="flex items-center space-x-1 p-1 hover:bg-white rounded border border-transparent hover:border-slate-200 text-left">
+                            <span class="w-3 h-3 rounded-full bg-[#00FF00]"></span>
+                            <span class="text-slate-600">緑 (C+Y)</span>
+                        </button>
+                        <button onclick="applyPreset(50, 50, 50, 0)" class="flex items-center space-x-1 p-1 hover:bg-white rounded border border-transparent hover:border-slate-200 text-left">
+                            <span class="w-3 h-3 rounded-full bg-[#7F7F7F]"></span>
+                            <span class="text-slate-600">グレー (C+M+Y)</span>
+                        </button>
+                        <button onclick="applyPreset(50, 50, 0, 50)" class="flex items-center space-x-1 p-1 hover:bg-white rounded border border-transparent hover:border-slate-200 text-left">
+                            <span class="w-3 h-3 rounded-full bg-[#A5C3F5]"></span>
+                            <span class="text-slate-600">パステルブルー</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- リセットボタン -->
+                <button onclick="applyPreset(0, 0, 0, 0)" class="mt-3 w-full bg-slate-200 hover:bg-slate-300 text-slate-700 py-1 px-3 rounded-lg text-xs font-bold transition-colors">
+                    すべてクリア (白に戻す)
+                </button>
+            </div>
+        </div>
+
+        <!-- スライダー操作部 -->
+        <div class="space-y-4">
+            <!-- シアン -->
+            <div class="bg-cyan-50/50 p-3 rounded-2xl border border-cyan-100">
+                <div class="flex justify-between items-center mb-1 text-cyan-800 font-bold text-xs">
+                    <span class="flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#00A0E9]"></span>
+                        シアン (Cyan)
+                    </span>
+                    <span id="cyanVal" class="font-mono bg-cyan-100 text-cyan-800 px-2 py-0.5 rounded-full text-[10px]">0%</span>
+                </div>
+                <input type="range" id="cyan" class="w-full" min="0" max="100" value="0">
+            </div>
+
+            <!-- マゼンタ -->
+            <div class="bg-pink-50/50 p-3 rounded-2xl border border-pink-100">
+                <div class="flex justify-between items-center mb-1 text-pink-800 font-bold text-xs">
+                    <span class="flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#E4007F]"></span>
+                        マゼンタ (Magenta)
+                    </span>
+                    <span id="magentaVal" class="font-mono bg-pink-100 text-pink-800 px-2 py-0.5 rounded-full text-[10px]">0%</span>
+                </div>
+                <input type="range" id="magenta" class="w-full" min="0" max="100" value="0">
+            </div>
+
+            <!-- イエロー -->
+            <div class="bg-yellow-50/50 p-3 rounded-2xl border border-yellow-100">
+                <div class="flex justify-between items-center mb-1 text-yellow-800 font-bold text-xs">
+                    <span class="flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#F5C700]"></span>
+                        イエロー (Yellow)
+                    </span>
+                    <span id="yellowVal" class="font-mono bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-full text-[10px]">0%</span>
+                </div>
+                <input type="range" id="yellow" class="w-full" min="0" max="100" value="0">
+            </div>
+
+            <!-- 白 -->
+            <div class="bg-slate-100/70 p-3 rounded-2xl border border-slate-200">
+                <div class="flex justify-between items-center mb-1 text-slate-700 font-bold text-xs">
+                    <span class="flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#FFFFFF] border border-slate-400"></span>
+                        ホワイト (White / うすめ液)
+                    </span>
+                    <span id="whiteVal" class="font-mono bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full text-[10px]">0%</span>
+                </div>
+                <input type="range" id="white" class="w-full" min="0" max="100" value="0">
+            </div>
+        </div>
+
+        <!-- 豆知識 -->
+        <div class="mt-5 p-3.5 bg-sky-50 text-sky-900 rounded-2xl text-[11px] leading-relaxed border border-sky-100">
+            <p class="font-bold mb-1">💡 減法混色のミニ知識</p>
+            <p>絵の具（インク）を混ぜるこの方式は<b>「減法混色（CMY）」</b>と呼ばれ、すべて混ぜると光をすべて吸収して黒（または暗いグレー）に近づきます。白スライダーを増やすと、色がうすまって優しいパステルカラーを作ることができます！</p>
+        </div>
+
+    </div>
+
+    <script>
+        // DOM要素の取得
+        const cyanSlider = document.getElementById('cyan');
+        const magentaSlider = document.getElementById('magenta');
+        const yellowSlider = document.getElementById('yellow');
+        const whiteSlider = document.getElementById('white');
+
+        const cyanVal = document.getElementById('cyanVal');
+        const magentaVal = document.getElementById('magentaVal');
+        const yellowVal = document.getElementById('yellowVal');
+        const whiteVal = document.getElementById('whiteVal');
+
+        const colorPreview = document.getElementById('colorPreview');
+        const hexValue = document.getElementById('hexValue');
+        const rgbValue = document.getElementById('rgbValue');
+
+        // 色計算と描画の更新
+        function updateColor() {
+            // それぞれ 0〜1 の割合に換算
+            const C = cyanSlider.value / 100;
+            const M = magentaSlider.value / 100;
+            const Y = yellowSlider.value / 100;
+            const W = whiteSlider.value / 100;
+
+            // 数値表示の更新
+            cyanVal.textContent = cyanSlider.value + "%";
+            magentaVal.textContent = magentaSlider.value + "%";
+            yellowVal.textContent = yellowSlider.value + "%";
+            whiteVal.textContent = whiteSlider.value + "%";
+
+            // 1. CMY から ベースの RGB を算出（光の吸収シミュレート）
+            // 何も混ぜていない状態 (C=0, M=0, Y=0) は、紙の白 (R=1, G=1, B=1)
+            let r = 1 - C;
+            let g = 1 - M;
+            let b = 1 - Y;
+
+            // 2. 「白 (W)」の混色シミュレーション
+            // 白を足すことで、すでに吸収された光成分(黒み)を中和（＝白に近づける）
+            // 絵の具に白を混ぜて薄める処理を数式化
+            r = r + (1 - r) * W;
+            g = g + (1 - g) * W;
+            b = b + (1 - b) * W;
+
+            // 3. 0〜255の範囲にスケール
+            const R = Math.max(0, Math.min(255, Math.round(r * 255)));
+            const G = Math.max(0, Math.min(255, Math.round(g * 255)));
+            const B = Math.max(0, Math.min(255, Math.round(b * 255)));
+
+            // 色コードの作成
+            const rgbColor = `rgb(${R}, ${G}, ${B})`;
+            const hexColor = "#" + [R, G, B].map(x => {
+                const hex = x.toString(16).toUpperCase();
+                return hex.length === 1 ? '0' + hex : hex;
+            }).join('');
+
+            // UIの適用
+            colorPreview.style.backgroundColor = rgbColor;
+            hexValue.textContent = hexColor;
+            rgbValue.textContent = rgbColor;
+        }
+
+        // プリセットボタン用
+        function applyPreset(c, m, y, w) {
+            cyanSlider.value = c;
+            magentaSlider.value = m;
+            yellowSlider.value = y;
+            whiteSlider.value = w;
+            updateColor();
+        }
+
+        // イベントリスナーの追加（リアルタイムに反映）
+        cyanSlider.addEventListener('input', updateColor);
+        magentaSlider.addEventListener('input', updateColor);
+        yellowSlider.addEventListener('input', updateColor);
+        whiteSlider.addEventListener('input', updateColor);
+
+        // 初期カラー表示
+        updateColor();
+    </script>
+</body>
+</html>
+
+
+---
+
+### アプリケーションの特長
+
+1. **絵の具を混ぜる減法混色（CMY）**:
+   ディスプレイのRGB（加法混色）とは異なり、混ぜるほど暗くなる絵の具の特性をシミュレートしています。
+2. **白スライダーの追加**:
+   白を加えることで、ビビッドな原色を落ち着いたパステル調のカラーに変えることができます。
+3. **レシピ機能**:
+   「緑」「赤」「青」をはじめ、「パステルブルー」などのおすすめ配合比率をワンタップで体験できるプリセット機能も用意しました。
