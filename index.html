@@ -89,13 +89,10 @@
                 <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
                     <h3 class="text-xs font-bold text-slate-700 mb-2 flex items-center gap-1.5">
                         <span class="w-1.5 h-3 bg-blue-500 rounded-full"></span>
-                        HEXからカラー分解
+                        HEXカラーコード指定
                     </h3>
                     <div class="flex gap-2">
                         <input type="text" id="hexInput" placeholder="#FFCC00" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs font-mono uppercase focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all" maxlength="7">
-                        <button onclick="convertHexToCmyw()" class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-1.5 px-4 rounded-xl text-xs transition-colors shrink-0 shadow-sm">
-                            分解
-                        </button>
                     </div>
                     <p id="errorMsg" class="text-[10px] text-red-500 mt-1 hidden font-semibold animate-pulse">正しい16進数（#HEX）で入力してください</p>
                 </div>
@@ -188,8 +185,8 @@
         </div>
 
         <div class="mt-6 p-4 bg-blue-50/50 text-blue-900/80 rounded-2xl text-[11px] leading-relaxed border border-blue-100/50">
-            <p class="font-bold text-blue-950 mb-0.5">💡 色のピッカー（H/S/V）と混色の連動</p>
-            <p>グラデーションマップ上をドラッグして好きな色を選んでみてください。選んだ瞬間にHEX入力欄へ反映されます。「分解」ボタンを押すと、その色を作るのに必要なシアン、マゼンタ、イエロー、ホワイトの黄金比率が自動で計算されます！</p>
+            <p class="font-bold text-blue-950 mb-0.5">💡 完全リアルタイム連動システム</p>
+            <p>グラデーションマップ上をタップ、クリック、またはなぞるだけで、その色が自動的にシアン、マゼンタ、イエロー、ホワイト（CMYW）の成分比率へとリアルタイムに逆算分解されます。</p>
         </div>
 
     </div>
@@ -231,18 +228,15 @@
             const height = colorMap.height;
             const hue = hueSlider.value;
 
-            // Canvasをクリアしてベースの単一色相を塗る
             ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
             ctx.fillRect(0, 0, width, height);
 
-            // 横方向：白のグラデーションを重ねる（左が白、右が透明）
             const whiteGrad = ctx.createLinearGradient(0, 0, width, 0);
             whiteGrad.addColorStop(0, 'rgba(255,255,255,1)');
             whiteGrad.addColorStop(1, 'rgba(255,255,255,0)');
             ctx.fillStyle = whiteGrad;
             ctx.fillRect(0, 0, width, height);
 
-            // 縦方向：黒のグラデーションを重ねる（上が透明、下が黒）
             const blackGrad = ctx.createLinearGradient(0, 0, 0, height);
             blackGrad.addColorStop(0, 'rgba(0,0,0,0)');
             blackGrad.addColorStop(1, 'rgba(0,0,0,1)');
@@ -250,34 +244,33 @@
             ctx.fillRect(0, 0, width, height);
         }
 
-        // マップ上から色を取得してHEX入力欄に適用
-        function pickColorFromMap(e) {
+        // マップ上から色を取得して自動的に分解（CMYWスライダーに即座に反映）
+        function pickColorAndConvert(e) {
             const rect = colorMap.getBoundingClientRect();
             let x = (e.clientX || e.touches?.[0]?.clientX) - rect.left;
             let y = (e.clientY || e.touches?.[0]?.clientY) - rect.top;
 
-            // 範囲外のクリッピング
             x = Math.max(0, Math.min(rect.width, x));
             y = Math.max(0, Math.min(rect.height, y));
 
-            // ピン位置の更新
             mapPointer.style.left = `${(x / rect.width) * 100}%`;
             mapPointer.style.top = `${(y / rect.height) * 100}%`;
 
-            // Canvas内の実際の位置にスケール換算してピクセルデータを取得
             const canvasX = Math.floor((x / rect.width) * colorMap.width);
             const canvasY = Math.floor((y / rect.height) * colorMap.height);
             const imgData = ctx.getImageData(canvasX, canvasY, 1, 1).data;
 
-            // HEXに変換して入力欄にセット
             const hex = rgbToHex(imgData[0], imgData[1], imgData[2]);
             hexInput.value = hex;
+
+            // リアルタイム分解を実行
+            executeHexToCmyw(hex);
         }
 
         // グラデーションマップのドラッグ処理
         let isDragging = false;
-        const startDrag = (e) => { isDragging = true; pickColorFromMap(e); };
-        const doDrag = (e) => { if (isDragging) pickColorFromMap(e); };
+        const startDrag = (e) => { isDragging = true; pickColorAndConvert(e); };
+        const doDrag = (e) => { if (isDragging) pickColorAndConvert(e); };
         const stopDrag = () => { isDragging = false; };
 
         colorMap.addEventListener('mousedown', startDrag);
@@ -288,18 +281,17 @@
         window.addEventListener('touchmove', doDrag, { passive: true });
         window.addEventListener('touchend', stopDrag);
 
-        // 色相スライダーが動いたらマップを再描画
+        // 色相スライダーが動いたらマップを更新し、その位置の色を即分解
         hueSlider.addEventListener('input', () => {
             drawColorMap();
-            // ピンの位置から現在の色を再取得
             const rect = colorMap.getBoundingClientRect();
             const pointerX = parseFloat(mapPointer.style.left) / 100 * colorMap.width;
             const pointerY = parseFloat(mapPointer.style.top) / 100 * colorMap.height;
             const imgData = ctx.getImageData(pointerX, pointerY, 1, 1).data;
             const hex = rgbToHex(imgData[0], imgData[1], imgData[2]);
             hexInput.value = hex;
+            executeHexToCmyw(hex);
         });
-
 
         // RGBからHEXへの変換
         function rgbToHex(r, g, b) {
@@ -324,42 +316,34 @@
             const Y = yellowSlider.value / 100;
             const W = whiteSlider.value / 100;
 
-            // 数値表示の更新
             cyanVal.textContent = cyanSlider.value + "%";
             magentaVal.textContent = magentaSlider.value + "%";
             yellowVal.textContent = yellowSlider.value + "%";
             whiteVal.textContent = whiteSlider.value + "%";
 
-            // 1. 減法混色の基本ブレンド（光の反射率に変換）
             let r = 1 - C;
             let g = 1 - M;
             let b = 1 - Y;
 
-            // 2. 白（W）の混色を適用
             r = r + (1 - r) * W;
             g = g + (1 - g) * W;
             b = b + (1 - b) * W;
 
-            // 3. 0〜255の範囲にスケール
             const R = Math.max(0, Math.min(255, Math.round(r * 255)));
             const G = Math.max(0, Math.min(255, Math.round(g * 255)));
             const B = Math.max(0, Math.min(255, Math.round(b * 255)));
 
-            // 色コードの作成
             const rgbColor = `rgb(${R}, ${G}, ${B})`;
             const hexColor = rgbToHex(R, G, B);
 
-            // UIの適用
             colorPreview.style.backgroundColor = rgbColor;
             colorPreview.style.boxShadow = `0 10px 25px -5px rgba(${R}, ${G}, ${B}, 0.35), inset 0 2px 4px rgba(0,0,0,0.06)`;
             hexValue.textContent = hexColor;
             rgbValue.textContent = rgbColor;
 
-            // スライダー背景のアップデート
             updateSliderBackgrounds();
         }
 
-        // プリセットボタン用の適用処理
         function applyPreset(c, m, y, w) {
             cyanSlider.value = c;
             magentaSlider.value = m;
@@ -368,39 +352,32 @@
             updateColor();
         }
 
-        // HEXカラーコードをCMYWスライダーの値に逆算する関数
-        function convertHexToCmyw() {
+        // 外部（グラデーションや手入力）から渡されたHEXを分解するコアロジック
+        function executeHexToCmyw(hex) {
             errorMsg.classList.add('hidden');
-            let hex = hexInput.value.trim();
             
-            // #の有無を考慮
             if (hex.startsWith('#')) {
                 hex = hex.slice(1);
             }
 
-            // 3桁から6桁への変換
             if (hex.length === 3) {
                 hex = hex.split('').map(char => char + char).join('');
             }
 
-            // フォーマット判定
             const isHex = /^[0-9A-Fa-f]{6}$/.test(hex);
             if (!isHex) {
                 errorMsg.classList.remove('hidden');
                 return;
             }
 
-            // 10進数のRGBに分割 (0〜255)
             const r = parseInt(hex.substring(0, 2), 16);
             const g = parseInt(hex.substring(2, 4), 16);
             const b = parseInt(hex.substring(4, 6), 16);
 
-            // 0〜1スケールに変換
             const rNorm = r / 255;
             const gNorm = g / 255;
             const bNorm = b / 255;
 
-            // 逆算アルゴリズム
             const maxVal = Math.max(rNorm, gNorm, bNorm);
             
             let wEst = 0;
@@ -430,20 +407,19 @@
                 wEst = 0;
             }
 
-            // スライダーの値(0〜100)に変換してクリッピング
             const finalC = Math.max(0, Math.min(100, Math.round(cEst * 100)));
             const finalM = Math.max(0, Math.min(100, Math.round(mEst * 100)));
             const finalY = Math.max(0, Math.min(100, Math.round(yEst * 100)));
             const finalW = Math.max(0, Math.min(100, Math.round(wEst * 100)));
 
-            // 反映
             applyPreset(finalC, finalM, finalY, finalW);
         }
 
-        // Enterキーでデコードを実行可能に
-        hexInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                convertHexToCmyw();
+        // 入力欄に手動入力して分解する場合（インプットイベント時）
+        hexInput.addEventListener('input', function() {
+            let hex = hexInput.value.trim();
+            if (hex.length === 6 || hex.length === 7) {
+                executeHexToCmyw(hex);
             }
         });
 
@@ -453,7 +429,7 @@
         yellowSlider.addEventListener('input', updateColor);
         whiteSlider.addEventListener('input', updateColor);
 
-        // 初期カラー表示 & キャンバス初期化
+        // 初期設定
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
         updateColor();
