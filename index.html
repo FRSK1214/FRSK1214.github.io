@@ -6,13 +6,12 @@
     <title>CMYW Mixer PRO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        // Tailwindのダークモードをクラス制御に設定
         tailwind.config = {
             darkMode: 'class',
         }
     </script>
     <style>
-        /* スライダーカスタムスタイル */
+        /* スライダーカスタムスタイル - つまみを少し大きくして操作性向上 */
         input[type="range"] {
             -webkit-appearance: none;
             appearance: none;
@@ -21,18 +20,18 @@
         }
         input[type="range"]::-webkit-slider-runnable-track {
             border-radius: 9999px;
-            height: 8px;
+            height: 10px;
             box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
         }
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            margin-top: -5px;
+            margin-top: -6px;
             background-color: #ffffff;
             border: 2px solid #4b5563;
             border-radius: 9999px;
-            height: 18px;
-            width: 18px;
+            height: 22px;
+            width: 22px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
             transition: transform 0.1s ease, border-color 0.1s ease;
         }
@@ -51,18 +50,18 @@
         }
     </style>
 </head>
-<body class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex items-center justify-center p-2 transition-colors duration-200">
+<body class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex items-center justify-center p-1 transition-colors duration-200">
 
-    <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-4 w-full max-w-xl transition-all duration-200">
+    <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-5 md:p-6 w-full max-w-2xl transition-all duration-200">
         
-        <div class="flex items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-700/60 pb-2 mb-3">
+        <div class="flex items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-700/60 pb-3 mb-4">
             <div>
-                <h1 id="ui-title" class="text-lg font-black tracking-tight">色の三原色 ＆ 白 ミキサー</h1>
-                <p id="ui-subtitle" class="text-[10px] text-slate-400 dark:text-slate-500">C・M·Y・Wを直感的にブレンド</p>
+                <h1 id="ui-title" class="text-xl md:text-2xl font-black tracking-tight">色の三原色 ＆ 白 ミキサー</h1>
+                <p id="ui-subtitle" class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">C・M・Y・Wを直感的にブレンド</p>
             </div>
             
-            <div class="flex items-center gap-1.5 shrink-0">
-                <select id="langSelect" class="bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg px-1.5 py-1 text-xs font-medium focus:outline-none">
+            <div class="flex items-center gap-2 shrink-0">
+                <select id="langSelect" class="bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl px-2.5 py-1.5 text-sm font-medium focus:outline-none cursor-pointer">
                     <option value="ja">JP</option>
                     <option value="en">EN</option>
                     <option value="de">DE</option>
@@ -70,131 +69,131 @@
                     <option value="zh">ZH</option>
                 </select>
 
-                <button id="themeToggle" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
-                    <svg id="sunIcon" class="w-4 h-4 hidden text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 17.95a1 1 0 01-1.414 0l-.707-.707a1 1 0 011.414-1.414l.707.707a1 1 0 010 1.414zm-1.414-12.73a1 1 0 00-1.414 1.414l.707.707a1 1 0 001.414-1.414l-.707-.707zM3 11a1 1 0 110-2h1a1 1 0 110 2H3z"></path></svg>
-                    <svg id="moonIcon" class="w-4 h-4 text-slate-500" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                <button id="themeToggle" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
+                    <svg id="sunIcon" class="w-5 h-5 hidden text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 17.95a1 1 0 01-1.414 0l-.707-.707a1 1 0 011.414-1.414l.707.707a1 1 0 010 1.414zm-1.414-12.73a1 1 0 00-1.414 1.414l.707.707a1 1 0 001.414-1.414l-.707-.707zM3 11a1 1 0 110-2h1a1 1 0 110 2H3z"></path></svg>
+                    <svg id="moonIcon" class="w-5 h-5 text-slate-500" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
                 </button>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
             
-            <div class="md:col-span-5 flex flex-col gap-2.5">
-                <div id="colorPreview" class="w-full h-24 rounded-xl shadow-inner border border-slate-200/80 dark:border-slate-700 transition-all duration-150 relative overflow-hidden flex flex-col justify-end p-2">
-                    <div class="bg-black/75 dark:bg-black/85 backdrop-blur-md text-white py-1 px-2 rounded-lg text-center space-y-0.5 shadow-md border border-white/10">
-                        <div id="hexValue" class="font-mono font-bold text-xs tracking-wider">#FFFFFF</div>
-                        <div id="rgbValue" class="font-mono text-[9px] text-slate-300">rgb(255, 255, 255)</div>
+            <div class="md:col-span-5 flex flex-col gap-3">
+                <div id="colorPreview" class="w-full h-32 rounded-2xl shadow-inner border border-slate-200/80 dark:border-slate-700 transition-all duration-150 relative overflow-hidden flex flex-col justify-end p-3">
+                    <div class="bg-black/75 dark:bg-black/85 backdrop-blur-md text-white py-1.5 px-3 rounded-xl text-center space-y-0.5 shadow-lg border border-white/10">
+                        <div id="hexValue" class="font-mono font-bold text-sm tracking-wider">#FFFFFF</div>
+                        <div id="rgbValue" class="font-mono text-xs text-slate-300">rgb(255, 255, 255)</div>
                     </div>
                 </div>
 
-                <div class="bg-slate-50 dark:bg-slate-900/50 rounded-xl p-2 border border-slate-100 dark:border-slate-800 flex flex-col gap-1.5">
-                    <h3 id="ui-grad-title" class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                <div class="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-3 border border-slate-100 dark:border-slate-800 flex flex-col gap-2.5">
+                    <h3 id="ui-grad-title" class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
                         グラデーションから色を選択
                     </h3>
                     
-                    <div class="relative w-full h-20 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700 shadow-inner">
+                    <div class="relative w-full h-28 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-inner">
                         <canvas id="colorMap" class="w-full h-full"></canvas>
-                        <div id="mapPointer" class="absolute w-3 h-3 border-2 border-white rounded-full shadow-md pointer-events-none -translate-x-1/2 -translate-y-1/2" style="top: 0%; left: 100%; background: transparent;"></div>
+                        <div id="mapPointer" class="absolute w-4 h-4 border-2 border-white rounded-full shadow-md pointer-events-none -translate-x-1/2 -translate-y-1/2" style="top: 0%; left: 100%; background: transparent;"></div>
                     </div>
 
-                    <div class="flex flex-col gap-0.5">
+                    <div class="flex flex-col gap-1">
                         <input type="range" id="hueSlider" class="w-full" min="0" max="360" value="0">
                     </div>
                 </div>
             </div>
 
-            <div class="md:col-span-7 flex flex-col justify-between gap-2.5">
-                <div class="bg-slate-50 dark:bg-slate-900/50 rounded-xl p-2.5 border border-slate-100 dark:border-slate-800">
-                    <h3 id="ui-hex-title" class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1.5 flex items-center gap-1">
-                        <span class="w-1 h-2.5 bg-blue-500 rounded-full"></span>
+            <div class="md:col-span-7 flex flex-col justify-between gap-3">
+                <div class="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-4 border border-slate-100 dark:border-slate-800">
+                    <h3 id="ui-hex-title" class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-2 flex items-center gap-1.5">
+                        <span class="w-1.5 h-3 bg-blue-500 rounded-full"></span>
                         HEXカラーコード指定
                     </h3>
-                    <input type="text" id="hexInput" placeholder="#FFCC00" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 text-xs font-mono uppercase focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all" maxlength="7">
-                    <p id="errorMsg" class="text-[9px] text-red-500 mt-0.5 hidden font-semibold animate-pulse">正しい16進数（#HEX）で入力してください</p>
+                    <input type="text" id="hexInput" placeholder="#FFCC00" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm font-mono uppercase focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all" maxlength="7">
+                    <p id="errorMsg" class="text-[10px] text-red-500 mt-1 hidden font-semibold animate-pulse">正しい16進数（#HEX）で入力してください</p>
                 </div>
 
-                <div class="bg-slate-50 dark:bg-slate-900/50 rounded-xl p-2.5 border border-slate-100 dark:border-slate-800">
-                    <h3 id="ui-recipe-title" class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase mb-1.5 flex items-center gap-1">
-                        <span class="w-1 h-2.5 bg-indigo-500 rounded-full"></span>
+                <div class="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-4 border border-slate-100 dark:border-slate-800">
+                    <h3 id="ui-recipe-title" class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-2.5 flex items-center gap-1.5">
+                        <span class="w-1.5 h-3 bg-indigo-500 rounded-full"></span>
                         ブレンドレシピ
                     </h3>
-                    <div class="grid grid-cols-2 gap-1.5 text-[10px]">
-                        <button onclick="applyPreset(100, 0, 0, 0)" class="flex items-center space-x-1.5 p-1 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-md border border-slate-150 dark:border-slate-700 transition-colors text-left">
-                            <span class="w-2.5 h-2.5 rounded-full bg-[#00A0E9] shrink-0"></span>
-                            <span id="preset-c" class="text-slate-600 dark:text-slate-300 font-medium truncate">シアン 100%</span>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <button onclick="applyPreset(100, 0, 0, 0)" class="flex items-center space-x-2 p-2 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg border border-slate-150 dark:border-slate-700 shadow-sm transition-colors text-left">
+                            <span class="w-3 h-3 rounded-full bg-[#00A0E9] shrink-0"></span>
+                            <span id="preset-c" class="text-slate-600 dark:text-slate-300 font-semibold truncate">シアン 100%</span>
                         </button>
-                        <button onclick="applyPreset(0, 100, 0, 0)" class="flex items-center space-x-1.5 p-1 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-md border border-slate-150 dark:border-slate-700 transition-colors text-left">
-                            <span class="w-2.5 h-2.5 rounded-full bg-[#E4007F] shrink-0"></span>
-                            <span id="preset-m" class="text-slate-600 dark:text-slate-300 font-medium truncate">マゼンタ 100%</span>
+                        <button onclick="applyPreset(0, 100, 0, 0)" class="flex items-center space-x-2 p-2 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg border border-slate-150 dark:border-slate-700 shadow-sm transition-colors text-left">
+                            <span class="w-3 h-3 rounded-full bg-[#E4007F] shrink-0"></span>
+                            <span id="preset-m" class="text-slate-600 dark:text-slate-300 font-semibold truncate">マゼンタ 100%</span>
                         </button>
-                        <button onclick="applyPreset(0, 0, 100, 0)" class="flex items-center space-x-1.5 p-1 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-md border border-slate-150 dark:border-slate-700 transition-colors text-left">
-                            <span class="w-2.5 h-2.5 rounded-full bg-[#F5C700] shrink-0"></span>
-                            <span id="preset-y" class="text-slate-600 dark:text-slate-300 font-medium truncate">イエロー 100%</span>
+                        <button onclick="applyPreset(0, 0, 100, 0)" class="flex items-center space-x-2 p-2 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg border border-slate-150 dark:border-slate-700 shadow-sm transition-colors text-left">
+                            <span class="w-3 h-3 rounded-full bg-[#F5C700] shrink-0"></span>
+                            <span id="preset-y" class="text-slate-600 dark:text-slate-300 font-semibold truncate">イエロー 100%</span>
                         </button>
-                        <button onclick="applyPreset(100, 100, 0, 0)" class="flex items-center space-x-1.5 p-1 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-md border border-slate-150 dark:border-slate-700 transition-colors text-left">
-                            <span class="w-2.5 h-2.5 rounded-full bg-[#0000FF] shrink-0"></span>
-                            <span id="preset-blue" class="text-slate-600 dark:text-slate-300 font-medium truncate">青 (C+M)</span>
+                        <button onclick="applyPreset(100, 100, 0, 0)" class="flex items-center space-x-2 p-2 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg border border-slate-150 dark:border-slate-700 shadow-sm transition-colors text-left">
+                            <span class="w-3 h-3 rounded-full bg-[#0000FF] shrink-0"></span>
+                            <span id="preset-blue" class="text-slate-600 dark:text-slate-300 font-semibold truncate">青 (C+M)</span>
                         </button>
-                        <button onclick="applyPreset(0, 100, 100, 0)" class="flex items-center space-x-1.5 p-1 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-md border border-slate-150 dark:border-slate-700 transition-colors text-left">
-                            <span class="w-2.5 h-2.5 rounded-full bg-[#FF0000] shrink-0"></span>
-                            <span id="preset-red" class="text-slate-600 dark:text-slate-300 font-medium truncate">赤 (M+Y)</span>
+                        <button onclick="applyPreset(0, 100, 100, 0)" class="flex items-center space-x-2 p-2 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg border border-slate-150 dark:border-slate-700 shadow-sm transition-colors text-left">
+                            <span class="w-3 h-3 rounded-full bg-[#FF0000] shrink-0"></span>
+                            <span id="preset-red" class="text-slate-600 dark:text-slate-300 font-semibold truncate">赤 (M+Y)</span>
                         </button>
-                        <button onclick="applyPreset(50, 50, 0, 50)" class="flex items-center space-x-1.5 p-1 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-md border border-slate-150 dark:border-slate-700 transition-colors text-left">
-                            <span class="w-2.5 h-2.5 rounded-full bg-[#A5C3F5] shrink-0"></span>
-                            <span id="preset-pastel" class="text-slate-600 dark:text-slate-300 font-medium truncate">パステルブルー</span>
+                        <button onclick="applyPreset(50, 50, 0, 50)" class="flex items-center space-x-2 p-2 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg border border-slate-150 dark:border-slate-700 shadow-sm transition-colors text-left">
+                            <span class="w-3 h-3 rounded-full bg-[#A5C3F5] shrink-0"></span>
+                            <span id="preset-pastel" class="text-slate-600 dark:text-slate-300 font-semibold truncate">パステルブルー</span>
                         </button>
                     </div>
                 </div>
 
-                <button id="ui-reset" onclick="applyPreset(0, 0, 0, 0)" class="w-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 py-1.5 px-3 rounded-xl text-xs font-bold transition-colors border border-slate-200 dark:border-slate-600">
+                <button id="ui-reset" onclick="applyPreset(0, 0, 0, 0)" class="w-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 py-2.5 px-4 rounded-xl text-xs font-bold transition-colors border border-slate-200 dark:border-slate-600 shadow-sm">
                     リセット (白に戻す)
                 </button>
             </div>
         </div>
 
-        <hr class="my-3 border-slate-100 dark:border-slate-700">
+        <hr class="my-4 border-slate-100 dark:border-slate-700">
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <div class="bg-cyan-50/20 dark:bg-cyan-950/10 p-2 rounded-xl border border-cyan-100/30 dark:border-cyan-900/30">
-                <div class="flex justify-between items-center mb-1 text-cyan-800 dark:text-cyan-400 font-bold text-xs">
-                    <span class="flex items-center gap-1">
-                        <span class="w-2 h-2 rounded-full bg-[#00A0E9]"></span>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="bg-cyan-50/30 dark:bg-cyan-950/20 p-3.5 rounded-2xl border border-cyan-100/40 dark:border-cyan-900/40">
+                <div class="flex justify-between items-center mb-1.5 text-cyan-800 dark:text-cyan-400 font-bold text-xs">
+                    <span class="flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#00A0E9]"></span>
                         <span id="label-cyan">シアン (C)</span>
                     </span>
-                    <span id="cyanVal" class="font-mono bg-cyan-100/50 dark:bg-cyan-950/80 text-cyan-800 dark:text-cyan-300 px-2 py-0.5 rounded-full text-[9px]">0%</span>
+                    <span id="cyanVal" class="font-mono bg-cyan-100/60 dark:bg-cyan-950/80 text-cyan-800 dark:text-cyan-300 px-2.5 py-0.5 rounded-full text-[10px]">0%</span>
                 </div>
                 <input type="range" id="cyan" class="w-full" min="0" max="100" value="0">
             </div>
 
-            <div class="bg-pink-50/20 dark:bg-pink-950/10 p-2 rounded-xl border border-pink-100/30 dark:border-pink-900/30">
-                <div class="flex justify-between items-center mb-1 text-pink-800 dark:text-pink-400 font-bold text-xs">
-                    <span class="flex items-center gap-1">
-                        <span class="w-2 h-2 rounded-full bg-[#E4007F]"></span>
+            <div class="bg-pink-50/30 dark:bg-pink-950/20 p-3.5 rounded-2xl border border-pink-100/40 dark:border-pink-900/40">
+                <div class="flex justify-between items-center mb-1.5 text-pink-800 dark:text-pink-400 font-bold text-xs">
+                    <span class="flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#E4007F]"></span>
                         <span id="label-magenta">マゼンタ (M)</span>
                     </span>
-                    <span id="magentaVal" class="font-mono bg-pink-100/50 dark:bg-pink-950/80 text-pink-800 dark:text-pink-300 px-2 py-0.5 rounded-full text-[9px]">0%</span>
+                    <span id="magentaVal" class="font-mono bg-pink-100/60 dark:bg-pink-950/80 text-pink-800 dark:text-pink-300 px-2.5 py-0.5 rounded-full text-[10px]">0%</span>
                 </div>
                 <input type="range" id="magenta" class="w-full" min="0" max="100" value="0">
             </div>
 
-            <div class="bg-yellow-50/20 dark:bg-yellow-950/10 p-2 rounded-xl border border-yellow-100/30 dark:border-yellow-900/30">
-                <div class="flex justify-between items-center mb-1 text-yellow-800 dark:text-yellow-500 font-bold text-xs">
-                    <span class="flex items-center gap-1">
-                        <span class="w-2 h-2 rounded-full bg-[#F5C700]"></span>
+            <div class="bg-yellow-50/30 dark:bg-yellow-950/20 p-3.5 rounded-2xl border border-yellow-100/40 dark:border-yellow-900/40">
+                <div class="flex justify-between items-center mb-1.5 text-yellow-800 dark:text-yellow-500 font-bold text-xs">
+                    <span class="flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#F5C700]"></span>
                         <span id="label-yellow">イエロー (Y)</span>
                     </span>
-                    <span id="yellowVal" class="font-mono bg-yellow-100/50 dark:bg-yellow-950/80 text-yellow-800 dark:text-yellow-300 px-2 py-0.5 rounded-full text-[9px]">0%</span>
+                    <span id="yellowVal" class="font-mono bg-yellow-100/60 dark:bg-yellow-950/80 text-yellow-800 dark:text-yellow-300 px-2.5 py-0.5 rounded-full text-[10px]">0%</span>
                 </div>
                 <input type="range" id="yellow" class="w-full" min="0" max="100" value="0">
             </div>
 
-            <div class="bg-slate-100/40 dark:bg-slate-900/30 p-2 rounded-xl border border-slate-200/30 dark:border-slate-800">
-                <div class="flex justify-between items-center mb-1 text-slate-700 dark:text-slate-300 font-bold text-xs">
-                    <span class="flex items-center gap-1">
-                        <span class="w-2 h-2 rounded-full bg-[#FFFFFF] border border-slate-400 shrink-0"></span>
+            <div class="bg-slate-100/50 dark:bg-slate-900/40 p-3.5 rounded-2xl border border-slate-200/40 dark:border-slate-800">
+                <div class="flex justify-between items-center mb-1.5 text-slate-700 dark:text-slate-300 font-bold text-xs">
+                    <span class="flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#FFFFFF] border border-slate-400 shrink-0"></span>
                         <span id="label-white">ホワイト (W)</span>
                     </span>
-                    <span id="whiteVal" class="font-mono bg-slate-200/60 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2 py-0.5 rounded-full text-[9px]">0%</span>
+                    <span id="whiteVal" class="font-mono bg-slate-200/80 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2.5 py-0.5 rounded-full text-[10px]">0%</span>
                 </div>
                 <input type="range" id="white" class="w-full" min="0" max="100" value="0">
             </div>
@@ -203,7 +202,7 @@
     </div>
 
     <script>
-        // 多言語翻訳マップ
+        // 5ヶ国語翻訳対応
         const translations = {
             ja: {
                 title: "色の三原色 ＆ 白 ミキサー",
@@ -211,11 +210,11 @@
                 gradTitle: "グラデーションから色を選択",
                 hexTitle: "HEXカラーコード指定",
                 recipeTitle: "ブレンドレシピ",
-                cyan: "シアン (Cyan)",
-                magenta: "マゼンタ (Magenta)",
-                yellow: "イエロー (Yellow)",
-                white: "ホワイト (White)",
-                reset: "パレットをリセット (白に戻す)",
+                cyan: "シアン (C)",
+                magenta: "マゼンタ (M)",
+                yellow: "イエロー (Y)",
+                white: "ホワイト (W)",
+                reset: "リセット (白に戻す)",
                 err: "正しい16進数（#HEX）で入力してください",
                 pc: "シアン 100%",
                 pm: "マゼンタ 100%",
@@ -329,7 +328,6 @@
         const sunIcon = document.getElementById('sunIcon');
         const moonIcon = document.getElementById('moonIcon');
 
-        // 言語アップデート処理
         function updateLanguage() {
             const lang = langSelect.value;
             const t = translations[lang];
@@ -356,7 +354,6 @@
 
         langSelect.addEventListener('change', updateLanguage);
 
-        // ダークモードの切り替え・設定
         function initTheme() {
             if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                 document.documentElement.classList.add('dark');
@@ -383,7 +380,7 @@
             }
         });
 
-        // 2Dグラデーションピッカー処理
+        // 2Dグラデーションピッカーの描画＆サイズ自動制御
         function resizeCanvas() {
             colorMap.width = colorMap.parentElement.clientWidth;
             colorMap.height = colorMap.parentElement.clientHeight;
@@ -456,7 +453,7 @@
             executeHexToCmyw(hex);
         });
 
-        // 混色コアロジック
+        // 混色ロジック
         function rgbToHex(r, g, b) {
             return "#" + [r, g, b].map(x => {
                 const hex = x.toString(16).toUpperCase();
@@ -513,7 +510,6 @@
             updateColor();
         }
 
-        // HEXからCMYWへリアルタイム逆算分解
         function executeHexToCmyw(hex) {
             errorMsg.classList.add('hidden');
             
@@ -576,7 +572,6 @@
             applyPreset(finalC, finalM, finalY, finalW);
         }
 
-        // 手動HEX入力監視
         hexInput.addEventListener('input', function() {
             let hex = hexInput.value.trim();
             if (hex.length === 6 || hex.length === 7) {
@@ -589,7 +584,7 @@
         yellowSlider.addEventListener('input', updateColor);
         whiteSlider.addEventListener('input', updateColor);
 
-        // 初期ロード
+        // 初始化
         window.addEventListener('resize', resizeCanvas);
         initTheme();
         updateLanguage();
