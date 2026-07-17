@@ -34,6 +34,17 @@
             transform: scale(1.15);
             border-color: #111827;
         }
+
+        /* 色相スライダーのカラフルな背景 */
+        #hueSlider::-webkit-slider-runnable-track {
+            background: linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
+        }
+
+        /* グラデーションマップの枠とカーソル固定用 */
+        #colorMap {
+            position: relative;
+            cursor: crosshair;
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-slate-50 to-slate-150 min-h-screen flex items-center justify-center p-4">
@@ -48,30 +59,28 @@
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
             
             <div class="md:col-span-5 flex flex-col gap-4">
-                <div id="colorPreview" class="w-full h-48 rounded-2xl shadow-inner border border-slate-200/80 transition-all duration-200 relative overflow-hidden flex flex-col justify-end p-4">
-                    <div class="bg-black/75 backdrop-blur-md text-white p-2.5 rounded-xl text-center space-y-1 shadow-lg border border-white/10">
-                        <div id="hexValue" class="font-mono font-bold text-sm tracking-widest">#FFFFFF</div>
-                        <div id="rgbValue" class="font-mono text-[10px] text-slate-300">rgb(255, 255, 255)</div>
+                <div id="colorPreview" class="w-full h-36 rounded-2xl shadow-inner border border-slate-200/80 transition-all duration-200 relative overflow-hidden flex flex-col justify-end p-3">
+                    <div class="bg-black/75 backdrop-blur-md text-white p-2 rounded-xl text-center space-y-0.5 shadow-lg border border-white/10">
+                        <div id="hexValue" class="font-mono font-bold text-xs tracking-widest">#FFFFFF</div>
+                        <div id="rgbValue" class="font-mono text-[9px] text-slate-300">rgb(255, 255, 255)</div>
                     </div>
                 </div>
 
-                <div class="bg-slate-50 rounded-2xl p-3 border border-slate-100">
-                    <h3 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">カラーパレット提案</h3>
-                    <div class="grid grid-cols-2 gap-2 text-xs">
-                        <div class="bg-white p-2 rounded-lg border border-slate-100 flex items-center gap-2">
-                            <span id="complementaryColor" class="w-5 h-5 rounded-md border border-slate-200 shrink-0"></span>
-                            <div>
-                                <p class="text-[9px] text-slate-400 font-bold">反対色（補色）</p>
-                                <p id="complementaryHex" class="font-mono text-[10px] text-slate-600">#000000</p>
-                            </div>
+                <div class="bg-slate-50 rounded-2xl p-3 border border-slate-100 flex flex-col gap-2">
+                    <h3 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                        グラデーションから色を選択
+                    </h3>
+                    
+                    <div class="relative w-full h-28 rounded-lg overflow-hidden border border-slate-200 shadow-inner">
+                        <canvas id="colorMap" class="w-full h-full"></canvas>
+                        <div id="mapPointer" class="absolute w-3.5 h-3.5 border-2 border-white rounded-full shadow-md pointer-events-none -translate-x-1/2 -translate-y-1/2" style="top: 0%; left: 100%; background: transparent;"></div>
+                    </div>
+
+                    <div class="flex flex-col gap-0.5">
+                        <div class="flex justify-between text-[9px] text-slate-400 font-bold">
+                            <span>色相 (Hue)</span>
                         </div>
-                        <div class="bg-white p-2 rounded-lg border border-slate-100 flex items-center gap-2">
-                            <span id="analogousColor" class="w-5 h-5 rounded-md border border-slate-200 shrink-0"></span>
-                            <div>
-                                <p class="text-[9px] text-slate-400 font-bold">類似色</p>
-                                <p id="analogousHex" class="font-mono text-[10px] text-slate-600">#000000</p>
-                            </div>
-                        </div>
+                        <input type="range" id="hueSlider" class="w-full" min="0" max="360" value="0">
                     </div>
                 </div>
             </div>
@@ -118,7 +127,7 @@
                             <span class="text-slate-600 font-medium">赤 (M + Y)</span>
                         </button>
                         <button onclick="applyPreset(50, 50, 0, 50)" class="flex items-center space-x-1.5 p-1.5 bg-white hover:bg-slate-100 rounded-lg border border-slate-150 transition-colors text-left">
-                            <span class="w-3 h-3 rounded-full bg-[#A5C3F5] ring-2 ring-blue-50 shrink-0"></span>
+                            <span class="w-3 h-3 rounded-full bg-[#A5C3F5] ring-2 ring-blue shrink-0"></span>
                             <span class="text-slate-600 font-medium">パステルブルー</span>
                         </button>
                     </div>
@@ -141,7 +150,7 @@
                     </span>
                     <span id="cyanVal" class="font-mono bg-cyan-100/80 text-cyan-800 px-2.5 py-0.5 rounded-full text-[10px]">0%</span>
                 </div>
-                <input type="range" id="cyan" class="w-full" min="0" max="100" value="0" style="background: transparent;">
+                <input type="range" id="cyan" class="w-full" min="0" max="100" value="0">
             </div>
 
             <div class="bg-pink-50/30 p-3.5 rounded-2xl border border-pink-100/50">
@@ -179,8 +188,8 @@
         </div>
 
         <div class="mt-6 p-4 bg-blue-50/50 text-blue-900/80 rounded-2xl text-[11px] leading-relaxed border border-blue-100/50">
-            <p class="font-bold text-blue-950 mb-0.5">💡 スライダーの色と混色のヒント</p>
-            <p>スライダー自体の背景色は、そのスライダーを動かしたときに「どんな方向に色が変化するか」をリアルタイムでシミュレートしています。混ぜるほど暗くなるのが「減法混色（C・M・Y）」、明るくパステル調にするのが「白」の役割です。</p>
+            <p class="font-bold text-blue-950 mb-0.5">💡 色のピッカー（H/S/V）と混色の連動</p>
+            <p>グラデーションマップ上をドラッグして好きな色を選んでみてください。選んだ瞬間にHEX入力欄へ反映されます。「分解」ボタンを押すと、その色を作るのに必要なシアン、マゼンタ、イエロー、ホワイトの黄金比率が自動で計算されます！</p>
         </div>
 
     </div>
@@ -203,11 +212,94 @@
         const hexInput = document.getElementById('hexInput');
         const errorMsg = document.getElementById('errorMsg');
 
-        // カラー提案用要素の取得
-        const compColor = document.getElementById('complementaryColor');
-        const compHex = document.getElementById('complementaryHex');
-        const analColor = document.getElementById('analogousColor');
-        const analHex = document.getElementById('analogousHex');
+        // グラデーションピッカー用のDOM
+        const colorMap = document.getElementById('colorMap');
+        const ctx = colorMap.getContext('2d');
+        const hueSlider = document.getElementById('hueSlider');
+        const mapPointer = document.getElementById('mapPointer');
+
+        // キャンバスの物理サイズ調整
+        function resizeCanvas() {
+            colorMap.width = colorMap.parentElement.clientWidth;
+            colorMap.height = colorMap.parentElement.clientHeight;
+            drawColorMap();
+        }
+
+        // 彩度(S)・明度(V)の2Dグラデーションを描画
+        function drawColorMap() {
+            const width = colorMap.width;
+            const height = colorMap.height;
+            const hue = hueSlider.value;
+
+            // Canvasをクリアしてベースの単一色相を塗る
+            ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+            ctx.fillRect(0, 0, width, height);
+
+            // 横方向：白のグラデーションを重ねる（左が白、右が透明）
+            const whiteGrad = ctx.createLinearGradient(0, 0, width, 0);
+            whiteGrad.addColorStop(0, 'rgba(255,255,255,1)');
+            whiteGrad.addColorStop(1, 'rgba(255,255,255,0)');
+            ctx.fillStyle = whiteGrad;
+            ctx.fillRect(0, 0, width, height);
+
+            // 縦方向：黒のグラデーションを重ねる（上が透明、下が黒）
+            const blackGrad = ctx.createLinearGradient(0, 0, 0, height);
+            blackGrad.addColorStop(0, 'rgba(0,0,0,0)');
+            blackGrad.addColorStop(1, 'rgba(0,0,0,1)');
+            ctx.fillStyle = blackGrad;
+            ctx.fillRect(0, 0, width, height);
+        }
+
+        // マップ上から色を取得してHEX入力欄に適用
+        function pickColorFromMap(e) {
+            const rect = colorMap.getBoundingClientRect();
+            let x = (e.clientX || e.touches?.[0]?.clientX) - rect.left;
+            let y = (e.clientY || e.touches?.[0]?.clientY) - rect.top;
+
+            // 範囲外のクリッピング
+            x = Math.max(0, Math.min(rect.width, x));
+            y = Math.max(0, Math.min(rect.height, y));
+
+            // ピン位置の更新
+            mapPointer.style.left = `${(x / rect.width) * 100}%`;
+            mapPointer.style.top = `${(y / rect.height) * 100}%`;
+
+            // Canvas内の実際の位置にスケール換算してピクセルデータを取得
+            const canvasX = Math.floor((x / rect.width) * colorMap.width);
+            const canvasY = Math.floor((y / rect.height) * colorMap.height);
+            const imgData = ctx.getImageData(canvasX, canvasY, 1, 1).data;
+
+            // HEXに変換して入力欄にセット
+            const hex = rgbToHex(imgData[0], imgData[1], imgData[2]);
+            hexInput.value = hex;
+        }
+
+        // グラデーションマップのドラッグ処理
+        let isDragging = false;
+        const startDrag = (e) => { isDragging = true; pickColorFromMap(e); };
+        const doDrag = (e) => { if (isDragging) pickColorFromMap(e); };
+        const stopDrag = () => { isDragging = false; };
+
+        colorMap.addEventListener('mousedown', startDrag);
+        window.addEventListener('mousemove', doDrag);
+        window.addEventListener('mouseup', stopDrag);
+
+        colorMap.addEventListener('touchstart', startDrag, { passive: true });
+        window.addEventListener('touchmove', doDrag, { passive: true });
+        window.addEventListener('touchend', stopDrag);
+
+        // 色相スライダーが動いたらマップを再描画
+        hueSlider.addEventListener('input', () => {
+            drawColorMap();
+            // ピンの位置から現在の色を再取得
+            const rect = colorMap.getBoundingClientRect();
+            const pointerX = parseFloat(mapPointer.style.left) / 100 * colorMap.width;
+            const pointerY = parseFloat(mapPointer.style.top) / 100 * colorMap.height;
+            const imgData = ctx.getImageData(pointerX, pointerY, 1, 1).data;
+            const hex = rgbToHex(imgData[0], imgData[1], imgData[2]);
+            hexInput.value = hex;
+        });
+
 
         // RGBからHEXへの変換
         function rgbToHex(r, g, b) {
@@ -217,38 +309,12 @@
             }).join('');
         }
 
-        // スライダーのトラック（背景）を動的に更新する関数
+        // スライダーのトラック（背景）を動的に更新
         function updateSliderBackgrounds() {
-            const c = cyanSlider.value / 100;
-            const m = magentaSlider.value / 100;
-            const y = yellowSlider.value / 100;
-            const w = whiteSlider.value / 100;
-
-            // 各色のベースを反映したリアルタイムグラデーション（スライダーの見た目の改善）
             cyanSlider.style.backgroundImage = `linear-gradient(to right, #ffffff, #00A0E9)`;
             magentaSlider.style.backgroundImage = `linear-gradient(to right, #ffffff, #E4007F)`;
             yellowSlider.style.backgroundImage = `linear-gradient(to right, #ffffff, #F5C700)`;
             whiteSlider.style.backgroundImage = `linear-gradient(to right, #94a3b8, #ffffff)`;
-        }
-
-        // 補色・類似色の算出とUI反映
-        function updateColorSuggestions(r, g, b) {
-            // 1. 補色 (色の反転)
-            const compR = 255 - r;
-            const compG = 255 - g;
-            const compB = 255 - b;
-            const cHex = rgbToHex(compR, compG, compB);
-            compColor.style.backgroundColor = cHex;
-            compHex.textContent = cHex;
-
-            // 2. 類似色 (RGB空間における簡単なHLSシフトに相当する簡易計算)
-            // 少しだけトーンを回すためにRGBを入れ替えたりマイルドにブレンド
-            const analR = Math.round((g + b) / 2);
-            const analG = Math.round((r + b) / 2);
-            const analB = Math.round((r + g) / 2);
-            const aHex = rgbToHex(analR, analG, analB);
-            analColor.style.backgroundColor = aHex;
-            analHex.textContent = aHex;
         }
 
         // 色計算と描画の更新
@@ -289,9 +355,8 @@
             hexValue.textContent = hexColor;
             rgbValue.textContent = rgbColor;
 
-            // 提案パレットとスライダー背景のアップデート
+            // スライダー背景のアップデート
             updateSliderBackgrounds();
-            updateColorSuggestions(R, G, B);
         }
 
         // プリセットボタン用の適用処理
@@ -388,7 +453,9 @@
         yellowSlider.addEventListener('input', updateColor);
         whiteSlider.addEventListener('input', updateColor);
 
-        // 初期カラー表示
+        // 初期カラー表示 & キャンバス初期化
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
         updateColor();
     </script>
 </body>
