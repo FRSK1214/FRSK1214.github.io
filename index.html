@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>色の三原色 ＆ 白 ミキサー</title>
-    <!-- Tailwind CSS (for modern UI styling) -->
+    <title>色の三原色 ＆ 白 ミキサー PRO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* スライダーのカスタムスタイル */
+        /* スライダー共通のカスタムスタイル */
         input[type="range"] {
             -webkit-appearance: none;
             appearance: none;
@@ -15,163 +14,173 @@
             cursor: pointer;
         }
         input[type="range"]::-webkit-slider-runnable-track {
-            background: #e5e7eb;
             border-radius: 9999px;
-            height: 8px;
+            height: 10px;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
         }
         input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            margin-top: -6px;
-            background-color: #374151;
+            margin-top: -5px;
+            background-color: #ffffff;
+            border: 2px solid #4b5563;
             border-radius: 9999px;
             height: 20px;
             width: 20px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-            transition: transform 0.1s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: transform 0.1s ease, border-color 0.1s ease;
         }
         input[type="range"]::-webkit-slider-thumb:hover {
-            transform: scale(1.1);
+            transform: scale(1.15);
+            border-color: #111827;
         }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen flex items-center justify-center p-4">
+<body class="bg-gradient-to-br from-slate-50 to-slate-150 min-h-screen flex items-center justify-center p-4">
 
-    <div class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 w-full max-w-lg transition-all duration-300">
+    <div class="bg-white rounded-3xl shadow-2xl border border-slate-100 p-6 w-full max-w-2xl transition-all duration-300">
         
-        <!-- ヘッダー -->
         <div class="text-center mb-6">
-            <h1 class="text-2xl font-bold text-slate-800">色の三原色と白のミキサー</h1>
-            <p class="text-xs text-slate-500 mt-1">シアン(C)・マゼンタ(M)・イエロー(Y)・白(W)の配合シミュレーター</p>
+            <h1 class="text-2xl md:text-3xl font-extrabold text-slate-800 tracking-tight">色の三原色 ＆ 白 ミキサー</h1>
+            <p class="text-xs md:text-sm text-slate-500 mt-1">シアン(C)・マゼンタ(M)・イエロー(Y)・白(W)を直感的にブレンド</p>
         </div>
 
-        <!-- プレビュー＆パレット部 -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <!-- メインプレビュー -->
-            <div class="flex flex-col items-center">
-                <div id="colorPreview" class="w-full h-40 rounded-2xl shadow-inner border border-slate-200 transition-colors duration-100 relative overflow-hidden flex items-end justify-center pb-3">
-                    <!-- 色情報表示（オーバーレイ） -->
-                    <div class="bg-black/60 backdrop-blur-sm text-white px-3 py-1.5 rounded-xl text-center text-xs space-y-0.5">
-                        <div id="hexValue" class="font-mono font-bold tracking-wider">#FFFFFF</div>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+            
+            <div class="md:col-span-5 flex flex-col gap-4">
+                <div id="colorPreview" class="w-full h-48 rounded-2xl shadow-inner border border-slate-200/80 transition-all duration-200 relative overflow-hidden flex flex-col justify-end p-4">
+                    <div class="bg-black/75 backdrop-blur-md text-white p-2.5 rounded-xl text-center space-y-1 shadow-lg border border-white/10">
+                        <div id="hexValue" class="font-mono font-bold text-sm tracking-widest">#FFFFFF</div>
                         <div id="rgbValue" class="font-mono text-[10px] text-slate-300">rgb(255, 255, 255)</div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 rounded-2xl p-3 border border-slate-100">
+                    <h3 class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">カラーパレット提案</h3>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-white p-2 rounded-lg border border-slate-100 flex items-center gap-2">
+                            <span id="complementaryColor" class="w-5 h-5 rounded-md border border-slate-200 shrink-0"></span>
+                            <div>
+                                <p class="text-[9px] text-slate-400 font-bold">反対色（補色）</p>
+                                <p id="complementaryHex" class="font-mono text-[10px] text-slate-600">#000000</p>
+                            </div>
+                        </div>
+                        <div class="bg-white p-2 rounded-lg border border-slate-100 flex items-center gap-2">
+                            <span id="analogousColor" class="w-5 h-5 rounded-md border border-slate-200 shrink-0"></span>
+                            <div>
+                                <p class="text-[9px] text-slate-400 font-bold">類似色</p>
+                                <p id="analogousHex" class="font-mono text-[10px] text-slate-600">#000000</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- HEXから逆算＆レシピ機能 -->
-            <div class="bg-slate-50 rounded-2xl p-4 flex flex-col justify-between border border-slate-100">
-                <!-- HEXから変換入力エリア -->
-                <div class="mb-3">
-                    <h3 class="text-xs font-bold text-slate-700 mb-2">HEXコードから三原色を分解</h3>
+            <div class="md:col-span-7 flex flex-col justify-between space-y-4">
+                <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+                    <h3 class="text-xs font-bold text-slate-700 mb-2 flex items-center gap-1.5">
+                        <span class="w-1.5 h-3 bg-blue-500 rounded-full"></span>
+                        HEXからカラー分解
+                    </h3>
                     <div class="flex gap-2">
-                        <input type="text" id="hexInput" placeholder="#FFCC00" class="w-full bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs font-mono uppercase focus:outline-none focus:ring-2 focus:ring-blue-500" maxlength="7">
-                        <button onclick="convertHexToCmyw()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-2.5 rounded-lg text-xs transition-colors shrink-0">
+                        <input type="text" id="hexInput" placeholder="#FFCC00" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs font-mono uppercase focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all" maxlength="7">
+                        <button onclick="convertHexToCmyw()" class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-1.5 px-4 rounded-xl text-xs transition-colors shrink-0 shadow-sm">
                             分解
                         </button>
                     </div>
-                    <p id="errorMsg" class="text-[10px] text-red-500 mt-1 hidden">正しい形式で入力してください</p>
+                    <p id="errorMsg" class="text-[10px] text-red-500 mt-1 hidden font-semibold animate-pulse">正しい16進数（#HEX）で入力してください</p>
                 </div>
 
-                <div>
-                    <h3 class="text-xs font-bold text-slate-700 mb-1.5">おすすめブレンドレシピ</h3>
-                    <div class="grid grid-cols-2 gap-1.5 text-xs">
-                        <button onclick="applyPreset(100, 0, 0, 0)" class="flex items-center space-x-1 p-0.5 hover:bg-white rounded border border-transparent hover:border-slate-200 text-left">
-                            <span class="w-2.5 h-2.5 rounded-full bg-[#00A0E9]"></span>
-                            <span class="text-slate-600 text-[11px]">シアン (100%)</span>
+                <div class="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+                    <h3 class="text-xs font-bold text-slate-700 mb-2.5 flex items-center gap-1.5">
+                        <span class="w-1.5 h-3 bg-indigo-500 rounded-full"></span>
+                        ブレンドレシピ
+                    </h3>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-2 gap-2 text-[11px]">
+                        <button onclick="applyPreset(100, 0, 0, 0)" class="flex items-center space-x-1.5 p-1.5 bg-white hover:bg-slate-100 rounded-lg border border-slate-150 transition-colors text-left">
+                            <span class="w-3 h-3 rounded-full bg-[#00A0E9] ring-2 ring-cyan-100 shrink-0"></span>
+                            <span class="text-slate-600 font-medium">シアン 100%</span>
                         </button>
-                        <button onclick="applyPreset(0, 100, 0, 0)" class="flex items-center space-x-1 p-0.5 hover:bg-white rounded border border-transparent hover:border-slate-200 text-left">
-                            <span class="w-2.5 h-2.5 rounded-full bg-[#E4007F]"></span>
-                            <span class="text-slate-600 text-[11px]">赤紫 (100%)</span>
+                        <button onclick="applyPreset(0, 100, 0, 0)" class="flex items-center space-x-1.5 p-1.5 bg-white hover:bg-slate-100 rounded-lg border border-slate-150 transition-colors text-left">
+                            <span class="w-3 h-3 rounded-full bg-[#E4007F] ring-2 ring-pink-100 shrink-0"></span>
+                            <span class="text-slate-600 font-medium">マゼンタ 100%</span>
                         </button>
-                        <button onclick="applyPreset(0, 0, 100, 0)" class="flex items-center space-x-1 p-0.5 hover:bg-white rounded border border-transparent hover:border-slate-200 text-left">
-                            <span class="w-2.5 h-2.5 rounded-full bg-[#F9E100]"></span>
-                            <span class="text-slate-600 text-[11px]">黄色 (100%)</span>
+                        <button onclick="applyPreset(0, 0, 100, 0)" class="flex items-center space-x-1.5 p-1.5 bg-white hover:bg-slate-100 rounded-lg border border-slate-150 transition-colors text-left">
+                            <span class="w-3 h-3 rounded-full bg-[#F5C700] ring-2 ring-yellow-100 shrink-0"></span>
+                            <span class="text-slate-600 font-medium">イエロー 100%</span>
                         </button>
-                        <button onclick="applyPreset(100, 100, 0, 0)" class="flex items-center space-x-1 p-0.5 hover:bg-white rounded border border-transparent hover:border-slate-200 text-left">
-                            <span class="w-2.5 h-2.5 rounded-full bg-[#0000FF]"></span>
-                            <span class="text-slate-600 text-[11px]">青 (C+M)</span>
+                        <button onclick="applyPreset(100, 100, 0, 0)" class="flex items-center space-x-1.5 p-1.5 bg-white hover:bg-slate-100 rounded-lg border border-slate-150 transition-colors text-left">
+                            <span class="w-3 h-3 rounded-full bg-[#0000FF] ring-2 ring-blue-100 shrink-0"></span>
+                            <span class="text-slate-600 font-medium">青 (C + M)</span>
                         </button>
-                        <button onclick="applyPreset(0, 100, 100, 0)" class="flex items-center space-x-1 p-0.5 hover:bg-white rounded border border-transparent hover:border-slate-200 text-left">
-                            <span class="w-2.5 h-2.5 rounded-full bg-[#FF0000]"></span>
-                            <span class="text-slate-600 text-[11px]">赤 (M+Y)</span>
+                        <button onclick="applyPreset(0, 100, 100, 0)" class="flex items-center space-x-1.5 p-1.5 bg-white hover:bg-slate-100 rounded-lg border border-slate-150 transition-colors text-left">
+                            <span class="w-3 h-3 rounded-full bg-[#FF0000] ring-2 ring-red-100 shrink-0"></span>
+                            <span class="text-slate-600 font-medium">赤 (M + Y)</span>
                         </button>
-                        <button onclick="applyPreset(100, 0, 100, 0)" class="flex items-center space-x-1 p-0.5 hover:bg-white rounded border border-transparent hover:border-slate-200 text-left">
-                            <span class="w-2.5 h-2.5 rounded-full bg-[#00FF00]"></span>
-                            <span class="text-slate-600 text-[11px]">緑 (C+Y)</span>
-                        </button>
-                        <button onclick="applyPreset(50, 50, 50, 0)" class="flex items-center space-x-1 p-0.5 hover:bg-white rounded border border-transparent hover:border-slate-200 text-left">
-                            <span class="w-2.5 h-2.5 rounded-full bg-[#7F7F7F]"></span>
-                            <span class="text-slate-600 text-[11px]">グレー (C+M+Y)</span>
-                        </button>
-                        <button onclick="applyPreset(50, 50, 0, 50)" class="flex items-center space-x-1 p-0.5 hover:bg-white rounded border border-transparent hover:border-slate-200 text-left">
-                            <span class="w-2.5 h-2.5 rounded-full bg-[#A5C3F5]"></span>
-                            <span class="text-slate-600 text-[11px]">パステルブルー</span>
+                        <button onclick="applyPreset(50, 50, 0, 50)" class="flex items-center space-x-1.5 p-1.5 bg-white hover:bg-slate-100 rounded-lg border border-slate-150 transition-colors text-left">
+                            <span class="w-3 h-3 rounded-full bg-[#A5C3F5] ring-2 ring-blue-50 shrink-0"></span>
+                            <span class="text-slate-600 font-medium">パステルブルー</span>
                         </button>
                     </div>
                 </div>
-                
-                <!-- リセットボタン -->
-                <button onclick="applyPreset(0, 0, 0, 0)" class="mt-3 w-full bg-slate-200 hover:bg-slate-300 text-slate-700 py-1 px-3 rounded-lg text-xs font-bold transition-colors">
-                    すべてクリア (白に戻す)
+
+                <button onclick="applyPreset(0, 0, 0, 0)" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 px-4 rounded-xl text-xs font-bold transition-colors border border-slate-200">
+                    パレットをリセット (白に戻す)
                 </button>
             </div>
         </div>
 
-        <!-- スライダー操作部 -->
-        <div class="space-y-4">
-            <!-- シアン -->
-            <div class="bg-cyan-50/50 p-3 rounded-2xl border border-cyan-100">
-                <div class="flex justify-between items-center mb-1 text-cyan-800 font-bold text-xs">
+        <hr class="my-6 border-slate-100">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="bg-cyan-50/30 p-3.5 rounded-2xl border border-cyan-100/50">
+                <div class="flex justify-between items-center mb-1.5 text-cyan-800 font-bold text-xs">
                     <span class="flex items-center gap-1.5">
                         <span class="w-2.5 h-2.5 rounded-full bg-[#00A0E9]"></span>
                         シアン (Cyan)
                     </span>
-                    <span id="cyanVal" class="font-mono bg-cyan-100 text-cyan-800 px-2 py-0.5 rounded-full text-[10px]">0%</span>
+                    <span id="cyanVal" class="font-mono bg-cyan-100/80 text-cyan-800 px-2.5 py-0.5 rounded-full text-[10px]">0%</span>
                 </div>
-                <input type="range" id="cyan" class="w-full" min="0" max="100" value="0">
+                <input type="range" id="cyan" class="w-full" min="0" max="100" value="0" style="background: transparent;">
             </div>
 
-            <!-- マゼンタ -->
-            <div class="bg-pink-50/50 p-3 rounded-2xl border border-pink-100">
-                <div class="flex justify-between items-center mb-1 text-pink-800 font-bold text-xs">
+            <div class="bg-pink-50/30 p-3.5 rounded-2xl border border-pink-100/50">
+                <div class="flex justify-between items-center mb-1.5 text-pink-800 font-bold text-xs">
                     <span class="flex items-center gap-1.5">
                         <span class="w-2.5 h-2.5 rounded-full bg-[#E4007F]"></span>
                         マゼンタ (Magenta)
                     </span>
-                    <span id="magentaVal" class="font-mono bg-pink-100 text-pink-800 px-2 py-0.5 rounded-full text-[10px]">0%</span>
+                    <span id="magentaVal" class="font-mono bg-pink-100/80 text-pink-800 px-2.5 py-0.5 rounded-full text-[10px]">0%</span>
                 </div>
                 <input type="range" id="magenta" class="w-full" min="0" max="100" value="0">
             </div>
 
-            <!-- イエロー -->
-            <div class="bg-yellow-50/50 p-3 rounded-2xl border border-yellow-100">
-                <div class="flex justify-between items-center mb-1 text-yellow-800 font-bold text-xs">
+            <div class="bg-yellow-50/30 p-3.5 rounded-2xl border border-yellow-100/50">
+                <div class="flex justify-between items-center mb-1.5 text-yellow-800 font-bold text-xs">
                     <span class="flex items-center gap-1.5">
                         <span class="w-2.5 h-2.5 rounded-full bg-[#F5C700]"></span>
                         イエロー (Yellow)
                     </span>
-                    <span id="yellowVal" class="font-mono bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-full text-[10px]">0%</span>
+                    <span id="yellowVal" class="font-mono bg-yellow-150 text-yellow-800 px-2.5 py-0.5 rounded-full text-[10px]">0%</span>
                 </div>
                 <input type="range" id="yellow" class="w-full" min="0" max="100" value="0">
             </div>
 
-            <!-- 白 -->
-            <div class="bg-slate-100/70 p-3 rounded-2xl border border-slate-200">
-                <div class="flex justify-between items-center mb-1 text-slate-700 font-bold text-xs">
+            <div class="bg-slate-100/50 p-3.5 rounded-2xl border border-slate-200/50">
+                <div class="flex justify-between items-center mb-1.5 text-slate-700 font-bold text-xs">
                     <span class="flex items-center gap-1.5">
                         <span class="w-2.5 h-2.5 rounded-full bg-[#FFFFFF] border border-slate-400"></span>
-                        ホワイト (White / うすめ液)
+                        ホワイト (White / 薄め液)
                     </span>
-                    <span id="whiteVal" class="font-mono bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full text-[10px]">0%</span>
+                    <span id="whiteVal" class="font-mono bg-slate-250 text-slate-700 px-2.5 py-0.5 rounded-full text-[10px]">0%</span>
                 </div>
                 <input type="range" id="white" class="w-full" min="0" max="100" value="0">
             </div>
         </div>
 
-        <!-- 豆知識 -->
-        <div class="mt-5 p-3.5 bg-sky-50 text-sky-900 rounded-2xl text-[11px] leading-relaxed border border-sky-100">
-            <p class="font-bold mb-1">💡 HEX（16進数）からの分解の仕組み</p>
-            <p>入力された色の「明るさ（明度）」から白（W）の配合量を決定し、残りの色のバランスからシアン（C）・マゼンタ（M）・イエロー（Y）の量を逆算してブレンド比率を算出しています。色々試してみてください！</p>
+        <div class="mt-6 p-4 bg-blue-50/50 text-blue-900/80 rounded-2xl text-[11px] leading-relaxed border border-blue-100/50">
+            <p class="font-bold text-blue-950 mb-0.5">💡 スライダーの色と混色のヒント</p>
+            <p>スライダー自体の背景色は、そのスライダーを動かしたときに「どんな方向に色が変化するか」をリアルタイムでシミュレートしています。混ぜるほど暗くなるのが「減法混色（C・M・Y）」、明るくパステル調にするのが「白」の役割です。</p>
         </div>
 
     </div>
@@ -194,7 +203,55 @@
         const hexInput = document.getElementById('hexInput');
         const errorMsg = document.getElementById('errorMsg');
 
-        // 色計算と描画の更新（C, M, Y, W から最終的な RGB を算出）
+        // カラー提案用要素の取得
+        const compColor = document.getElementById('complementaryColor');
+        const compHex = document.getElementById('complementaryHex');
+        const analColor = document.getElementById('analogousColor');
+        const analHex = document.getElementById('analogousHex');
+
+        // RGBからHEXへの変換
+        function rgbToHex(r, g, b) {
+            return "#" + [r, g, b].map(x => {
+                const hex = x.toString(16).toUpperCase();
+                return hex.length === 1 ? '0' + hex : hex;
+            }).join('');
+        }
+
+        // スライダーのトラック（背景）を動的に更新する関数
+        function updateSliderBackgrounds() {
+            const c = cyanSlider.value / 100;
+            const m = magentaSlider.value / 100;
+            const y = yellowSlider.value / 100;
+            const w = whiteSlider.value / 100;
+
+            // 各色のベースを反映したリアルタイムグラデーション（スライダーの見た目の改善）
+            cyanSlider.style.backgroundImage = `linear-gradient(to right, #ffffff, #00A0E9)`;
+            magentaSlider.style.backgroundImage = `linear-gradient(to right, #ffffff, #E4007F)`;
+            yellowSlider.style.backgroundImage = `linear-gradient(to right, #ffffff, #F5C700)`;
+            whiteSlider.style.backgroundImage = `linear-gradient(to right, #94a3b8, #ffffff)`;
+        }
+
+        // 補色・類似色の算出とUI反映
+        function updateColorSuggestions(r, g, b) {
+            // 1. 補色 (色の反転)
+            const compR = 255 - r;
+            const compG = 255 - g;
+            const compB = 255 - b;
+            const cHex = rgbToHex(compR, compG, compB);
+            compColor.style.backgroundColor = cHex;
+            compHex.textContent = cHex;
+
+            // 2. 類似色 (RGB空間における簡単なHLSシフトに相当する簡易計算)
+            // 少しだけトーンを回すためにRGBを入れ替えたりマイルドにブレンド
+            const analR = Math.round((g + b) / 2);
+            const analG = Math.round((r + b) / 2);
+            const analB = Math.round((r + g) / 2);
+            const aHex = rgbToHex(analR, analG, analB);
+            analColor.style.backgroundColor = aHex;
+            analHex.textContent = aHex;
+        }
+
+        // 色計算と描画の更新
         function updateColor() {
             const C = cyanSlider.value / 100;
             const M = magentaSlider.value / 100;
@@ -207,12 +264,12 @@
             yellowVal.textContent = yellowSlider.value + "%";
             whiteVal.textContent = whiteSlider.value + "%";
 
-            // 1. 減法混色（CMY）の基本ブレンド（光の反射率に変換）
+            // 1. 減法混色の基本ブレンド（光の反射率に変換）
             let r = 1 - C;
             let g = 1 - M;
             let b = 1 - Y;
 
-            // 2. 白（W）の混色を適用（色が白に近づく）
+            // 2. 白（W）の混色を適用
             r = r + (1 - r) * W;
             g = g + (1 - g) * W;
             b = b + (1 - b) * W;
@@ -224,15 +281,17 @@
 
             // 色コードの作成
             const rgbColor = `rgb(${R}, ${G}, ${B})`;
-            const hexColor = "#" + [R, G, B].map(x => {
-                const hex = x.toString(16).toUpperCase();
-                return hex.length === 1 ? '0' + hex : hex;
-            }).join('');
+            const hexColor = rgbToHex(R, G, B);
 
             // UIの適用
             colorPreview.style.backgroundColor = rgbColor;
+            colorPreview.style.boxShadow = `0 10px 25px -5px rgba(${R}, ${G}, ${B}, 0.35), inset 0 2px 4px rgba(0,0,0,0.06)`;
             hexValue.textContent = hexColor;
             rgbValue.textContent = rgbColor;
+
+            // 提案パレットとスライダー背景のアップデート
+            updateSliderBackgrounds();
+            updateColorSuggestions(R, G, B);
         }
 
         // プリセットボタン用の適用処理
@@ -259,7 +318,7 @@
                 hex = hex.split('').map(char => char + char).join('');
             }
 
-            // フォーマット判定 (16進数6桁であること)
+            // フォーマット判定
             const isHex = /^[0-9A-Fa-f]{6}$/.test(hex);
             if (!isHex) {
                 errorMsg.classList.remove('hidden');
@@ -276,47 +335,30 @@
             const gNorm = g / 255;
             const bNorm = b / 255;
 
-            // --- 逆算アルゴリズム ---
-            // ミキサーのロジック:
-            //   r = (1 - C) + C * W; => r = 1 - C * (1 - W)
-            // 同様に:
-            //   g = 1 - M * (1 - W)
-            //   b = 1 - Y * (1 - Y)
-            // ここから逆にC, M, Y, Wを算出。
-            
-            // 最も明るい要素（最大値）から、どの程度白が入っているか（白の上限値）をベースに割り出します
+            // 逆算アルゴリズム
             const maxVal = Math.max(rNorm, gNorm, bNorm);
             
-            // 完全に白（r,g,bがすべて1）に近いほど、Wの最低値が定まります
-            // ここでは簡易的に、一番明るいチャンネルをWの基準とします。
             let wEst = 0;
             let cEst = 0;
             let mEst = 0;
             let yEst = 0;
 
             if (maxVal > 0) {
-                // 最低限必要な「白」の量を推測（すべてのチャンネルに含まれる最小ベース光）
                 const minVal = Math.min(rNorm, gNorm, bNorm);
-                
-                // 全ての色が均等に明るい場合は白成分（W）が高くなる
                 wEst = minVal; 
 
-                // W成分を差し引いた上で、各三原色成分（CMY）を算出
-                // 1 - W の分母が0に近づきすぎないようクリッピング
                 const div = 1 - wEst;
                 if (div > 0.01) {
                     cEst = (1 - rNorm) / div;
                     mEst = (1 - gNorm) / div;
                     yEst = (1 - bNorm) / div;
                 } else {
-                    // ほぼ純粋な白に近い場合
                     cEst = 0;
                     mEst = 0;
                     yEst = 0;
                     wEst = 1;
                 }
             } else {
-                // 真っ黒の場合
                 cEst = 1;
                 mEst = 1;
                 yEst = 1;
@@ -329,7 +371,7 @@
             const finalY = Math.max(0, Math.min(100, Math.round(yEst * 100)));
             const finalW = Math.max(0, Math.min(100, Math.round(wEst * 100)));
 
-            // スライダーを動かして画面更新
+            // 反映
             applyPreset(finalC, finalM, finalY, finalW);
         }
 
@@ -340,7 +382,7 @@
             }
         });
 
-        // イベントリスナーの追加（リアルタイムに反映）
+        // イベントリスナーの追加
         cyanSlider.addEventListener('input', updateColor);
         magentaSlider.addEventListener('input', updateColor);
         yellowSlider.addEventListener('input', updateColor);
