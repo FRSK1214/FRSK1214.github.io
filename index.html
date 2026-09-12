@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
@@ -246,7 +246,7 @@
     <nav style="margin-bottom:20px;">
       <a href="Mixer.html"
         style="color:var(--muted); text-decoration:none; font-size:.9rem; border:1px solid var(--border); padding:6px 14px; border-radius:20px;">🎨
-        Color Mixer はこちら</a>
+        Try the Color Mixer</a>
     </nav>
     <div class="logo-mark"></div>
     <h1>Hyper<span>ion</span></h1>
@@ -272,7 +272,7 @@
 
   <section>
     <div class="container">
-      <h2>他プレイヤーとの比較</h2>
+      <h2>Comparison with other players</h2>
       <div class="table-wrap">
         <table class="comparison" id="comparison-root"></table>
       </div>
@@ -281,7 +281,7 @@
 
   <section>
     <div class="container">
-      <h2>ダウンロード</h2>
+      <h2>Download</h2>
       <div class="versions" id="versions-root"></div>
     </div>
   </section>
@@ -292,42 +292,42 @@
 
   <script>
     /* =====================================================================
-       ▼▼▼ ここから下がデータ定義エリア ▼▼▼
-       数値やラベルを書き換えるだけで、上のセクションが自動的に更新されます。
+       ▼▼▼ DATA SECTION STARTS HERE ▼▼▼
+       Edit the numbers and labels below, and the sections above update automatically.
        ===================================================================== */
 
-    // --- パフォーマンス比較（棒グラフ） ---
-    // baseline を持つ項目は自動的にそれを100%として横幅を計算します。
+    // --- Performance comparison (bar charts) ---
+    // Bar widths are automatically scaled relative to the largest value in each group.
     const performanceData = [
       {
-        title: "MIDI読み込み速度",
+        title: "MIDI loading speed",
         number: "16.94",
         unit: "x",
-        suffix: "MIDI読み込みが高速",
-        unit_label: "秒 (小さいほど良い)",
+        suffix: "faster MIDI loading",
+        unit_label: "seconds (lower is better)",
         bars: [
           { name: "Hyperion", value: 3.5, isSelf: true },
           { name: "Wasabi", value: 4.0 },
-          { name: "PFA (基準)", value: 59.3 },
+          { name: "PFA (baseline)", value: 59.3 },
         ]
       },
       {
-        title: "メモリ使用量",
+        title: "Memory usage",
         number: "2.74",
         unit: "x",
-        suffix: "メモリ使用量を削減",
-        unit_label: "MiB (小さいほど良い)",
+        suffix: "less memory usage",
+        unit_label: "MiB (lower is better)",
         bars: [
           { name: "Wasabi", value: 1821 },
           { name: "Hyperion", value: 2888, isSelf: true },
-          { name: "PFA (基準)", value: 7927 },
+          { name: "PFA (baseline)", value: 7927 },
         ],
-        note: "3100万ノーツを含む単一MIDIファイルの読み込み性能 Ryzen 5 5625U (6コア 2.3GHz) のPCで計測。比較値は参考情報です。"
+        note: "Loading performance for a single MIDI file with 31 million notes, measured on a Ryzen 5 5625U (6-core, 2.3GHz) PC. Comparisons are for reference only."
       },
     ];
 
-    // --- 詳細比較表 ---
-    // columns の中で hyperion:true にした列がハイライトされます。
+    // --- Detailed comparison table ---
+    // Columns with hyperion:true are highlighted.
     const comparisonTable = {
       columns: [
         { key: "pfa", label: "PFA" },
@@ -336,35 +336,35 @@
       ],
       rows: [
         {
-          label: "MIDI読み込み速度",
-          values: { pfa: "遅い", hyperion: "速い", wasabi: "速い" },
+          label: "MIDI loading speed",
+          values: { pfa: "Slow", hyperion: "Fast", wasabi: "Fast" },
         },
         {
-          label: "パフォーマンス",
-          values: { pfa: "重い", hyperion: "軽量", wasabi: "より軽量" },
+          label: "Performance",
+          values: { pfa: "Heavy", hyperion: "Lightweight", wasabi: "Lighter" },
         },
         {
-          label: "メモリ使用量<br><small>1ノートあたりの推定使用量(64bit)</small>",
+          label: "Memory usage<br><small>Estimated per-note usage (64-bit)</small>",
           values: { pfa: "59 bytes", hyperion: "43 bytes", wasabi: "29 bytes" },
           best: "wasabi"
         },
         {
-          label: "ノーツの見た目を変更",
+          label: "Can change note appearance",
           values: { pfa: "no", hyperion: "yes", wasabi: "yes" },
           best: "hyperion,wasabi"
         },
         {
-          label: "設定項目数",
-          values: { pfa: "少ない", hyperion: "多い", wasabi: "普通" },
+          label: "Number of settings",
+          values: { pfa: "Few", hyperion: "Many", wasabi: "Moderate" },
           best: "hyperion"
         },
       ]
     };
 
-    // --- ダウンロードバージョン情報 ---
+    // --- Download version info ---
     const versions = [
       {
-        name: "最新版",
+        name: "Latest",
         number: "1.1.0-Beta",
         date: "2026-09-09",
         sizeText: "17.8MiB",
@@ -374,8 +374,8 @@
     ];
 
     /* =====================================================================
-       ▲▲▲ データ定義エリアはここまで ▲▲▲
-       これ以降は描画用のロジックです。通常は編集不要です。
+       ▲▲▲ DATA SECTION ENDS HERE ▲▲▲
+       Everything below is rendering logic. You normally don't need to edit it.
        ===================================================================== */
 
     function iconYes() {
@@ -453,8 +453,8 @@
     <div class="version-card">
       <div>${v.name}</div>
       <h3>${v.number}</h3>
-      <div style="color:var(--muted)">${v.date} リリース</div>
-      <a class="btn" href="${v.url}">ダウンロード <small>(${v.sizeText})</small></a>
+      <div style="color:var(--muted)">Released ${v.date}</div>
+      <a class="btn" href="${v.url}">Download <small>(${v.sizeText})</small></a>
     </div>
   `).join("");
     }
