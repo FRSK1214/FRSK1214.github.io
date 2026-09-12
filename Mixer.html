@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ja" class="transition-colors duration-200">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMYW Mixer PRO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <style>
+        /* スライダーカスタムスタイル - つまみを少し大きくして操作性向上 */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            cursor: pointer;
+        }
+        input[type="range"]::-webkit-slider-runnable-track {
+            border-radius: 9999px;
+            height: 10px;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            margin-top: -6px;
+            background-color: #ffffff;
+            border: 2px solid #4b5563;
+            border-radius: 9999px;
+            height: 22px;
+            width: 22px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: transform 0.1s ease, border-color 0.1s ease;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+
+        /* 色相スライダーのカラフル背景 */
+        #hueSlider::-webkit-slider-runnable-track {
+            background: linear-gradient(to right, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
+        }
+
+        #colorMap {
+            position: relative;
+            cursor: crosshair;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex items-center justify-center p-1 transition-colors duration-200">
+
+    <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl border border-slate-200/50 dark:border-slate-700/50 p-5 md:p-6 w-full max-w-2xl transition-all duration-200">
+        
+        <div class="flex items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-700/60 pb-3 mb-4">
+            <div>
+                <h1 id="ui-title" class="text-xl md:text-2xl font-black tracking-tight">色の三原色 ＆ 白 ミキサー</h1>
+                <p id="ui-subtitle" class="text-xs text-slate-400 dark:text-slate-500 mt-0.5">C・M・Y・Wを直感的にブレンド</p>
+            </div>
+            
+            <div class="flex items-center gap-2 shrink-0">
+                <select id="langSelect" class="bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl px-2.5 py-1.5 text-sm font-medium focus:outline-none cursor-pointer">
+                    <option value="ja">JP</option>
+                    <option value="en">EN</option>
+                    <option value="de">DE</option>
+                    <option value="ko">KO</option>
+                    <option value="zh">ZH</option>
+                </select>
+
+                <button id="themeToggle" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors">
+                    <svg id="sunIcon" class="w-5 h-5 hidden text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 17.95a1 1 0 01-1.414 0l-.707-.707a1 1 0 011.414-1.414l.707.707a1 1 0 010 1.414zm-1.414-12.73a1 1 0 00-1.414 1.414l.707.707a1 1 0 001.414-1.414l-.707-.707zM3 11a1 1 0 110-2h1a1 1 0 110 2H3z"></path></svg>
+                    <svg id="moonIcon" class="w-5 h-5 text-slate-500" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+            
+            <div class="md:col-span-5 flex flex-col gap-3">
+                <div id="colorPreview" class="w-full h-32 rounded-2xl shadow-inner border border-slate-200/80 dark:border-slate-700 transition-all duration-150 relative overflow-hidden flex flex-col justify-end p-3">
+                    <div class="bg-black/75 dark:bg-black/85 backdrop-blur-md text-white py-1.5 px-3 rounded-xl text-center space-y-0.5 shadow-lg border border-white/10">
+                        <div id="hexValue" class="font-mono font-bold text-sm tracking-wider">#FFFFFF</div>
+                        <div id="rgbValue" class="font-mono text-xs text-slate-300">rgb(255, 255, 255)</div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-3 border border-slate-100 dark:border-slate-800 flex flex-col gap-2.5">
+                    <h3 id="ui-grad-title" class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                        グラデーションから色を選択
+                    </h3>
+                    
+                    <div class="relative w-full h-28 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-inner">
+                        <canvas id="colorMap" class="w-full h-full"></canvas>
+                        <div id="mapPointer" class="absolute w-4 h-4 border-2 border-white rounded-full shadow-md pointer-events-none -translate-x-1/2 -translate-y-1/2" style="top: 0%; left: 100%; background: transparent;"></div>
+                    </div>
+
+                    <div class="flex flex-col gap-1">
+                        <input type="range" id="hueSlider" class="w-full" min="0" max="360" value="0">
+                    </div>
+                </div>
+            </div>
+
+            <div class="md:col-span-7 flex flex-col justify-between gap-3">
+                <div class="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-4 border border-slate-100 dark:border-slate-800">
+                    <h3 id="ui-hex-title" class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-2 flex items-center gap-1.5">
+                        <span class="w-1.5 h-3 bg-blue-500 rounded-full"></span>
+                        HEXカラーコード指定
+                    </h3>
+                    <input type="text" id="hexInput" placeholder="#FFCC00" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-2 text-sm font-mono uppercase focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all" maxlength="7">
+                    <p id="errorMsg" class="text-[10px] text-red-500 mt-1 hidden font-semibold animate-pulse">正しい16進数（#HEX）で入力してください</p>
+                </div>
+
+                <div class="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-4 border border-slate-100 dark:border-slate-800">
+                    <h3 id="ui-recipe-title" class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mb-2.5 flex items-center gap-1.5">
+                        <span class="w-1.5 h-3 bg-indigo-500 rounded-full"></span>
+                        ブレンドレシピ
+                    </h3>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <button onclick="applyPreset(100, 0, 0, 0)" class="flex items-center space-x-2 p-2 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg border border-slate-150 dark:border-slate-700 shadow-sm transition-colors text-left">
+                            <span class="w-3 h-3 rounded-full bg-[#00A0E9] shrink-0"></span>
+                            <span id="preset-c" class="text-slate-600 dark:text-slate-300 font-semibold truncate">シアン 100%</span>
+                        </button>
+                        <button onclick="applyPreset(0, 100, 0, 0)" class="flex items-center space-x-2 p-2 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg border border-slate-150 dark:border-slate-700 shadow-sm transition-colors text-left">
+                            <span class="w-3 h-3 rounded-full bg-[#E4007F] shrink-0"></span>
+                            <span id="preset-m" class="text-slate-600 dark:text-slate-300 font-semibold truncate">マゼンタ 100%</span>
+                        </button>
+                        <button onclick="applyPreset(0, 0, 100, 0)" class="flex items-center space-x-2 p-2 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg border border-slate-150 dark:border-slate-700 shadow-sm transition-colors text-left">
+                            <span class="w-3 h-3 rounded-full bg-[#F5C700] shrink-0"></span>
+                            <span id="preset-y" class="text-slate-600 dark:text-slate-300 font-semibold truncate">イエロー 100%</span>
+                        </button>
+                        <button onclick="applyPreset(100, 100, 0, 0)" class="flex items-center space-x-2 p-2 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg border border-slate-150 dark:border-slate-700 shadow-sm transition-colors text-left">
+                            <span class="w-3 h-3 rounded-full bg-[#0000FF] shrink-0"></span>
+                            <span id="preset-blue" class="text-slate-600 dark:text-slate-300 font-semibold truncate">青 (C+M)</span>
+                        </button>
+                        <button onclick="applyPreset(0, 100, 100, 0)" class="flex items-center space-x-2 p-2 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg border border-slate-150 dark:border-slate-700 shadow-sm transition-colors text-left">
+                            <span class="w-3 h-3 rounded-full bg-[#FF0000] shrink-0"></span>
+                            <span id="preset-red" class="text-slate-600 dark:text-slate-300 font-semibold truncate">赤 (M+Y)</span>
+                        </button>
+                        <button onclick="applyPreset(50, 50, 0, 50)" class="flex items-center space-x-2 p-2 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg border border-slate-150 dark:border-slate-700 shadow-sm transition-colors text-left">
+                            <span class="w-3 h-3 rounded-full bg-[#A5C3F5] shrink-0"></span>
+                            <span id="preset-pastel" class="text-slate-600 dark:text-slate-300 font-semibold truncate">パステルブルー</span>
+                        </button>
+                    </div>
+                </div>
+
+                <button id="ui-reset" onclick="applyPreset(0, 0, 0, 0)" class="w-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 py-2.5 px-4 rounded-xl text-xs font-bold transition-colors border border-slate-200 dark:border-slate-600 shadow-sm">
+                    リセット (白に戻す)
+                </button>
+            </div>
+        </div>
+
+        <hr class="my-4 border-slate-100 dark:border-slate-700">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="bg-cyan-50/30 dark:bg-cyan-950/20 p-3.5 rounded-2xl border border-cyan-100/40 dark:border-cyan-900/40">
+                <div class="flex justify-between items-center mb-1.5 text-cyan-800 dark:text-cyan-400 font-bold text-xs">
+                    <span class="flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#00A0E9]"></span>
+                        <span id="label-cyan">シアン (C)</span>
+                    </span>
+                    <span id="cyanVal" class="font-mono bg-cyan-100/60 dark:bg-cyan-950/80 text-cyan-800 dark:text-cyan-300 px-2.5 py-0.5 rounded-full text-[10px]">0%</span>
+                </div>
+                <input type="range" id="cyan" class="w-full" min="0" max="100" value="0">
+            </div>
+
+            <div class="bg-pink-50/30 dark:bg-pink-950/20 p-3.5 rounded-2xl border border-pink-100/40 dark:border-pink-900/40">
+                <div class="flex justify-between items-center mb-1.5 text-pink-800 dark:text-pink-400 font-bold text-xs">
+                    <span class="flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#E4007F]"></span>
+                        <span id="label-magenta">マゼンタ (M)</span>
+                    </span>
+                    <span id="magentaVal" class="font-mono bg-pink-100/60 dark:bg-pink-950/80 text-pink-800 dark:text-pink-300 px-2.5 py-0.5 rounded-full text-[10px]">0%</span>
+                </div>
+                <input type="range" id="magenta" class="w-full" min="0" max="100" value="0">
+            </div>
+
+            <div class="bg-yellow-50/30 dark:bg-yellow-950/20 p-3.5 rounded-2xl border border-yellow-100/40 dark:border-yellow-900/40">
+                <div class="flex justify-between items-center mb-1.5 text-yellow-800 dark:text-yellow-500 font-bold text-xs">
+                    <span class="flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#F5C700]"></span>
+                        <span id="label-yellow">イエロー (Y)</span>
+                    </span>
+                    <span id="yellowVal" class="font-mono bg-yellow-100/60 dark:bg-yellow-950/80 text-yellow-800 dark:text-yellow-300 px-2.5 py-0.5 rounded-full text-[10px]">0%</span>
+                </div>
+                <input type="range" id="yellow" class="w-full" min="0" max="100" value="0">
+            </div>
+
+            <div class="bg-slate-100/50 dark:bg-slate-900/40 p-3.5 rounded-2xl border border-slate-200/40 dark:border-slate-800">
+                <div class="flex justify-between items-center mb-1.5 text-slate-700 dark:text-slate-300 font-bold text-xs">
+                    <span class="flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#FFFFFF] border border-slate-400 shrink-0"></span>
+                        <span id="label-white">ホワイト (W)</span>
+                    </span>
+                    <span id="whiteVal" class="font-mono bg-slate-200/80 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-2.5 py-0.5 rounded-full text-[10px]">0%</span>
+                </div>
+                <input type="range" id="white" class="w-full" min="0" max="100" value="0">
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // 5ヶ国語翻訳対応
+        const translations = {
+            ja: {
+                title: "色の三原色 ＆ 白 ミキサー",
+                subtitle: "シアン(C)・マゼンタ(M)・イエロー(Y)・白(W)を直感的にブレンド",
+                gradTitle: "グラデーションから色を選択",
+                hexTitle: "HEXカラーコード指定",
+                recipeTitle: "ブレンドレシピ",
+                cyan: "シアン (C)",
+                magenta: "マゼンタ (M)",
+                yellow: "イエロー (Y)",
+                white: "ホワイト (W)",
+                reset: "リセット (白に戻す)",
+                err: "正しい16進数（#HEX）で入力してください",
+                pc: "シアン 100%",
+                pm: "マゼンタ 100%",
+                py: "イエロー 100%",
+                pb: "青 (C+M)",
+                pr: "赤 (M+Y)",
+                pp: "パステルブルー"
+            },
+            en: {
+                title: "CMYW Color Mixer",
+                subtitle: "Blend Cyan, Magenta, Yellow, and White intuitively",
+                gradTitle: "Select color from gradient",
+                hexTitle: "Specify HEX Code",
+                recipeTitle: "Blend Presets",
+                cyan: "Cyan (C)",
+                magenta: "Magenta (M)",
+                yellow: "Yellow (Y)",
+                white: "White (W)",
+                reset: "Reset Palette (Back to White)",
+                err: "Please enter a valid Hex code",
+                pc: "Cyan 100%",
+                pm: "Magenta 100%",
+                py: "Yellow 100%",
+                pb: "Blue (C+M)",
+                pr: "Red (M+Y)",
+                pp: "Pastel Blue"
+            },
+            de: {
+                title: "CMYW Farbmischer",
+                subtitle: "Mischen Sie Cyan, Magenta, Gelb und Weiß intuitiv",
+                gradTitle: "Farbe aus Farbverlauf wählen",
+                hexTitle: "HEX-Code eingeben",
+                recipeTitle: "Mischrezepte",
+                cyan: "Cyan (C)",
+                magenta: "Magenta (M)",
+                yellow: "Gelb (Y)",
+                white: "Weiß (W)",
+                reset: "Zurücksetzen (Auf Weiß)",
+                err: "Bitte geben Sie einen gültigen Hex-Code ein",
+                pc: "Cyan 100%",
+                pm: "Magenta 100%",
+                py: "Gelb 100%",
+                pb: "Blau (C+M)",
+                pr: "Rot (M+Y)",
+                pp: "Pastellblau"
+            },
+            ko: {
+                title: "삼원색 & 화이트 믹서",
+                subtitle: "시안(C), 마젠타(M), 옐로우(Y), 화이트(W)를 직관적으로 혼합",
+                gradTitle: "그라데이션에서 색상 선택",
+                hexTitle: "HEX 컬러 코드 지정",
+                recipeTitle: "혼합 레시피",
+                cyan: "시안 (C)",
+                magenta: "마젠타 (M)",
+                yellow: "옐로우 (Y)",
+                white: "화이트 (W)",
+                reset: "재설정 (화이트로 복원)",
+                err: "올바른 16진수(#HEX)를 입력하세요",
+                pc: "시안 100%",
+                pm: "마젠타 100%",
+                py: "옐로우 100%",
+                pb: "파랑 (C+M)",
+                pr: "빨강 (M+Y)",
+                pp: "파스텔 블루"
+            },
+            zh: {
+                title: "CMYW 三原色与白混合器",
+                subtitle: "直观地混合青、洋红、黄和白",
+                gradTitle: "从渐变板中选择颜色",
+                hexTitle: "指定 HEX 颜色代码",
+                recipeTitle: "混合配方",
+                cyan: "青色 (C)",
+                magenta: "洋红 (M)",
+                yellow: "黄色 (Y)",
+                white: "白色 (W)",
+                reset: "重置面板 (恢复为白)",
+                err: "请输入正确的 16 进制颜色代码",
+                pc: "青色 100%",
+                pm: "洋红 100%",
+                py: "黄色 100%",
+                pb: "蓝色 (青+洋红)",
+                pr: "红色 (洋红+黄)",
+                pp: "粉蓝色"
+            }
+        };
+
+        // DOM Elements
+        const cyanSlider = document.getElementById('cyan');
+        const magentaSlider = document.getElementById('magenta');
+        const yellowSlider = document.getElementById('yellow');
+        const whiteSlider = document.getElementById('white');
+
+        const cyanVal = document.getElementById('cyanVal');
+        const magentaVal = document.getElementById('magentaVal');
+        const yellowVal = document.getElementById('yellowVal');
+        const whiteVal = document.getElementById('whiteVal');
+
+        const colorPreview = document.getElementById('colorPreview');
+        const hexValue = document.getElementById('hexValue');
+        const rgbValue = document.getElementById('rgbValue');
+        const hexInput = document.getElementById('hexInput');
+        const errorMsg = document.getElementById('errorMsg');
+
+        const colorMap = document.getElementById('colorMap');
+        const ctx = colorMap.getContext('2d');
+        const hueSlider = document.getElementById('hueSlider');
+        const mapPointer = document.getElementById('mapPointer');
+
+        const langSelect = document.getElementById('langSelect');
+        const themeToggle = document.getElementById('themeToggle');
+        const sunIcon = document.getElementById('sunIcon');
+        const moonIcon = document.getElementById('moonIcon');
+
+        function updateLanguage() {
+            const lang = langSelect.value;
+            const t = translations[lang];
+
+            document.getElementById('ui-title').textContent = t.title;
+            document.getElementById('ui-subtitle').textContent = t.subtitle;
+            document.getElementById('ui-grad-title').textContent = t.gradTitle;
+            document.getElementById('ui-hex-title').textContent = t.hexTitle;
+            document.getElementById('ui-recipe-title').textContent = t.recipeTitle;
+            document.getElementById('label-cyan').textContent = t.cyan;
+            document.getElementById('label-magenta').textContent = t.magenta;
+            document.getElementById('label-yellow').textContent = t.yellow;
+            document.getElementById('label-white').textContent = t.white;
+            document.getElementById('ui-reset').textContent = t.reset;
+            document.getElementById('errorMsg').textContent = t.err;
+
+            document.getElementById('preset-c').textContent = t.pc;
+            document.getElementById('preset-m').textContent = t.pm;
+            document.getElementById('preset-y').textContent = t.py;
+            document.getElementById('preset-blue').textContent = t.pb;
+            document.getElementById('preset-red').textContent = t.pr;
+            document.getElementById('preset-pastel').textContent = t.pp;
+        }
+
+        langSelect.addEventListener('change', updateLanguage);
+
+        function initTheme() {
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            } else {
+                document.documentElement.classList.remove('dark');
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            }
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            }
+        });
+
+        // 2Dグラデーションピッカーの描画＆サイズ自動制御
+        function resizeCanvas() {
+            colorMap.width = colorMap.parentElement.clientWidth;
+            colorMap.height = colorMap.parentElement.clientHeight;
+            drawColorMap();
+        }
+
+        function drawColorMap() {
+            const width = colorMap.width;
+            const height = colorMap.height;
+            const hue = hueSlider.value;
+
+            ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+            ctx.fillRect(0, 0, width, height);
+
+            const whiteGrad = ctx.createLinearGradient(0, 0, width, 0);
+            whiteGrad.addColorStop(0, 'rgba(255,255,255,1)');
+            whiteGrad.addColorStop(1, 'rgba(255,255,255,0)');
+            ctx.fillStyle = whiteGrad;
+            ctx.fillRect(0, 0, width, height);
+
+            const blackGrad = ctx.createLinearGradient(0, 0, 0, height);
+            blackGrad.addColorStop(0, 'rgba(0,0,0,0)');
+            blackGrad.addColorStop(1, 'rgba(0,0,0,1)');
+            ctx.fillStyle = blackGrad;
+            ctx.fillRect(0, 0, width, height);
+        }
+
+        function pickColorAndConvert(e) {
+            const rect = colorMap.getBoundingClientRect();
+            let x = (e.clientX || e.touches?.[0]?.clientX) - rect.left;
+            let y = (e.clientY || e.touches?.[0]?.clientY) - rect.top;
+
+            x = Math.max(0, Math.min(rect.width, x));
+            y = Math.max(0, Math.min(rect.height, y));
+
+            mapPointer.style.left = `${(x / rect.width) * 100}%`;
+            mapPointer.style.top = `${(y / rect.height) * 100}%`;
+
+            const canvasX = Math.floor((x / rect.width) * colorMap.width);
+            const canvasY = Math.floor((y / rect.height) * colorMap.height);
+            const imgData = ctx.getImageData(canvasX, canvasY, 1, 1).data;
+
+            const hex = rgbToHex(imgData[0], imgData[1], imgData[2]);
+            hexInput.value = hex;
+
+            executeHexToCmyw(hex);
+        }
+
+        let isDragging = false;
+        const startDrag = (e) => { isDragging = true; pickColorAndConvert(e); };
+        const doDrag = (e) => { if (isDragging) pickColorAndConvert(e); };
+        const stopDrag = () => { isDragging = false; };
+
+        colorMap.addEventListener('mousedown', startDrag);
+        window.addEventListener('mousemove', doDrag);
+        window.addEventListener('mouseup', stopDrag);
+
+        colorMap.addEventListener('touchstart', startDrag, { passive: true });
+        window.addEventListener('touchmove', doDrag, { passive: true });
+        window.addEventListener('touchend', stopDrag);
+
+        hueSlider.addEventListener('input', () => {
+            drawColorMap();
+            const rect = colorMap.getBoundingClientRect();
+            const pointerX = parseFloat(mapPointer.style.left) / 100 * colorMap.width;
+            const pointerY = parseFloat(mapPointer.style.top) / 100 * colorMap.height;
+            const imgData = ctx.getImageData(pointerX, pointerY, 1, 1).data;
+            const hex = rgbToHex(imgData[0], imgData[1], imgData[2]);
+            hexInput.value = hex;
+            executeHexToCmyw(hex);
+        });
+
+        // 混色ロジック
+        function rgbToHex(r, g, b) {
+            return "#" + [r, g, b].map(x => {
+                const hex = x.toString(16).toUpperCase();
+                return hex.length === 1 ? '0' + hex : hex;
+            }).join('');
+        }
+
+        function updateSliderBackgrounds() {
+            cyanSlider.style.backgroundImage = `linear-gradient(to right, #ffffff, #00A0E9)`;
+            magentaSlider.style.backgroundImage = `linear-gradient(to right, #ffffff, #E4007F)`;
+            yellowSlider.style.backgroundImage = `linear-gradient(to right, #ffffff, #F5C700)`;
+            whiteSlider.style.backgroundImage = `linear-gradient(to right, #94a3b8, #ffffff)`;
+        }
+
+        function updateColor() {
+            const C = cyanSlider.value / 100;
+            const M = magentaSlider.value / 100;
+            const Y = yellowSlider.value / 100;
+            const W = whiteSlider.value / 100;
+
+            cyanVal.textContent = cyanSlider.value + "%";
+            magentaVal.textContent = magentaSlider.value + "%";
+            yellowVal.textContent = yellowSlider.value + "%";
+            whiteVal.textContent = whiteSlider.value + "%";
+
+            let r = 1 - C;
+            let g = 1 - M;
+            let b = 1 - Y;
+
+            r = r + (1 - r) * W;
+            g = g + (1 - g) * W;
+            b = b + (1 - b) * W;
+
+            const R = Math.max(0, Math.min(255, Math.round(r * 255)));
+            const G = Math.max(0, Math.min(255, Math.round(g * 255)));
+            const B = Math.max(0, Math.min(255, Math.round(b * 255)));
+
+            const rgbColor = `rgb(${R}, ${G}, ${B})`;
+            const hexColor = rgbToHex(R, G, B);
+
+            colorPreview.style.backgroundColor = rgbColor;
+            colorPreview.style.boxShadow = `0 10px 25px -5px rgba(${R}, ${G}, ${B}, 0.35), inset 0 2px 4px rgba(0,0,0,0.06)`;
+            hexValue.textContent = hexColor;
+            rgbValue.textContent = rgbColor;
+
+            updateSliderBackgrounds();
+        }
+
+        function applyPreset(c, m, y, w) {
+            cyanSlider.value = c;
+            magentaSlider.value = m;
+            yellowSlider.value = y;
+            whiteSlider.value = w;
+            updateColor();
+        }
+
+        function executeHexToCmyw(hex) {
+            errorMsg.classList.add('hidden');
+            
+            if (hex.startsWith('#')) {
+                hex = hex.slice(1);
+            }
+
+            if (hex.length === 3) {
+                hex = hex.split('').map(char => char + char).join('');
+            }
+
+            const isHex = /^[0-9A-Fa-f]{6}$/.test(hex);
+            if (!isHex) {
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+
+            const r = parseInt(hex.substring(0, 2), 16);
+            const g = parseInt(hex.substring(2, 4), 16);
+            const b = parseInt(hex.substring(4, 6), 16);
+
+            const rNorm = r / 255;
+            const gNorm = g / 255;
+            const bNorm = b / 255;
+
+            const maxVal = Math.max(rNorm, gNorm, bNorm);
+            
+            let wEst = 0;
+            let cEst = 0;
+            let mEst = 0;
+            let yEst = 0;
+
+            if (maxVal > 0) {
+                const minVal = Math.min(rNorm, gNorm, bNorm);
+                wEst = minVal; 
+
+                const div = 1 - wEst;
+                if (div > 0.01) {
+                    cEst = (1 - rNorm) / div;
+                    mEst = (1 - gNorm) / div;
+                    yEst = (1 - bNorm) / div;
+                } else {
+                    cEst = 0;
+                    mEst = 0;
+                    yEst = 0;
+                    wEst = 1;
+                }
+            } else {
+                cEst = 1;
+                mEst = 1;
+                yEst = 1;
+                wEst = 0;
+            }
+
+            const finalC = Math.max(0, Math.min(100, Math.round(cEst * 100)));
+            const finalM = Math.max(0, Math.min(100, Math.round(mEst * 100)));
+            const finalY = Math.max(0, Math.min(100, Math.round(yEst * 100)));
+            const finalW = Math.max(0, Math.min(100, Math.round(wEst * 100)));
+
+            applyPreset(finalC, finalM, finalY, finalW);
+        }
+
+        hexInput.addEventListener('input', function() {
+            let hex = hexInput.value.trim();
+            if (hex.length === 6 || hex.length === 7) {
+                executeHexToCmyw(hex);
+            }
+        });
+
+        cyanSlider.addEventListener('input', updateColor);
+        magentaSlider.addEventListener('input', updateColor);
+        yellowSlider.addEventListener('input', updateColor);
+        whiteSlider.addEventListener('input', updateColor);
+
+        // 初始化
+        window.addEventListener('resize', resizeCanvas);
+        initTheme();
+        updateLanguage();
+        resizeCanvas();
+        updateColor();
+    </script>
+</body>
+</html>
