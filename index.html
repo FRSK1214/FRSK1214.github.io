@@ -20,9 +20,13 @@
       --sans: "Segoe UI", Arial, sans-serif;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+    }
 
     .scroll-progress {
       height: 3px;
@@ -69,11 +73,20 @@
       z-index: -1;
     }
 
-    .site-header, main, .site-footer { position: relative; z-index: 1; }
+    .site-header,
+    main,
+    .site-footer {
+      position: relative;
+      z-index: 1;
+    }
 
-    a { color: inherit; }
+    a {
+      color: inherit;
+    }
 
-    button { font: inherit; }
+    button {
+      font: inherit;
+    }
 
     .site-header {
       align-items: center;
@@ -95,7 +108,9 @@
       white-space: nowrap;
     }
 
-    .wordmark span { color: var(--gold); }
+    .wordmark span {
+      color: var(--gold);
+    }
 
     .header-controls {
       align-items: center;
@@ -140,7 +155,10 @@
       white-space: nowrap;
     }
 
-    .tab:hover { color: var(--ink); transform: translateY(-1px); }
+    .tab:hover {
+      color: var(--ink);
+      transform: translateY(-1px);
+    }
 
     .tab[aria-selected="true"] {
       color: #24251f;
@@ -162,7 +180,11 @@
       white-space: nowrap;
     }
 
-    .motion-toggle:hover { border-color: var(--gold); color: var(--ink); transform: translateY(-1px); }
+    .motion-toggle:hover {
+      border-color: var(--gold);
+      color: var(--ink);
+      transform: translateY(-1px);
+    }
 
     .motion-toggle::before {
       background: var(--mint);
@@ -173,10 +195,18 @@
       width: 7px;
     }
 
-    .motion-off .motion-toggle::before { background: var(--muted); box-shadow: none; }
-    .motion-off .motion-toggle { color: var(--muted); }
+    .motion-off .motion-toggle::before {
+      background: var(--muted);
+      box-shadow: none;
+    }
 
-    main { min-height: calc(100vh - 150px); }
+    .motion-off .motion-toggle {
+      color: var(--muted);
+    }
+
+    main {
+      min-height: calc(100vh - 150px);
+    }
 
     .tab-panel {
       margin: 0 auto;
@@ -184,7 +214,9 @@
       padding: clamp(4rem, 7vw, 6.5rem) 2rem;
     }
 
-    .tab-panel[hidden] { display: none; }
+    .tab-panel[hidden] {
+      display: none;
+    }
 
     .eyebrow {
       color: var(--gold);
@@ -209,7 +241,10 @@
       max-width: 850px;
     }
 
-    .quiet-title em { color: var(--gold); font-weight: 400; }
+    .quiet-title em {
+      color: var(--gold);
+      font-weight: 400;
+    }
 
     .quiet-intro {
       color: #c1c2b9;
@@ -258,7 +293,15 @@
       animation: rule-grow 1.2s .2s both;
     }
 
-    @keyframes rule-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+    @keyframes rule-grow {
+      from {
+        transform: scaleX(0);
+      }
+
+      to {
+        transform: scaleX(1);
+      }
+    }
 
     .quiet-columns {
       display: grid;
@@ -272,14 +315,23 @@
       transition: border-color .35s ease, transform .35s ease;
     }
 
-    .quiet-columns article:hover { border-color: var(--gold); transform: translateY(-4px); }
+    .quiet-columns article:hover {
+      border-color: var(--gold);
+      transform: translateY(-4px);
+    }
 
     .quiet-columns h2 {
       font: 400 1.65rem/1.2 var(--serif);
       margin: 0 0 1.1rem;
     }
 
-    .quiet-columns p { color: var(--muted); font-size: .94rem; line-height: 1.85; margin: 0; max-width: 38ch; }
+    .quiet-columns p {
+      color: var(--muted);
+      font-size: .94rem;
+      line-height: 1.85;
+      margin: 0;
+      max-width: 38ch;
+    }
 
     .gathering {
       align-items: center;
@@ -293,8 +345,15 @@
       padding: 2.2rem 2.4rem;
     }
 
-    .gathering h2 { font: 400 1.55rem var(--serif); margin: 0 0 .25rem; }
-    .gathering p { color: var(--muted); margin: 0; }
+    .gathering h2 {
+      font: 400 1.55rem var(--serif);
+      margin: 0 0 .25rem;
+    }
+
+    .gathering p {
+      color: var(--muted);
+      margin: 0;
+    }
 
     .text-link {
       border-bottom: 1px solid rgba(215, 189, 131, .6);
@@ -305,9 +364,14 @@
       transition: color .25s ease, border-color .25s ease;
     }
 
-    .text-link:hover { border-color: var(--ink); color: var(--ink); }
+    .text-link:hover {
+      border-color: var(--ink);
+      color: var(--ink);
+    }
 
-    .hyperion-panel { max-width: 1160px; }
+    .hyperion-panel {
+      max-width: 1160px;
+    }
 
     .hyperion-heading {
       align-items: end;
@@ -323,7 +387,9 @@
       margin: 0;
     }
 
-    .hyperion-heading h1 span { color: var(--gold); }
+    .hyperion-heading h1 span {
+      color: var(--gold);
+    }
 
     .hyperion-heading p {
       color: var(--muted);
@@ -347,7 +413,11 @@
       overflow: hidden;
     }
 
-    .video-frame iframe { border: 0; height: 100%; width: 100%; }
+    .video-frame iframe {
+      border: 0;
+      height: 100%;
+      width: 100%;
+    }
 
     .download-card {
       background:
@@ -376,7 +446,9 @@
       width: 190px;
     }
 
-    .download-card:hover::after { transform: scale(1.45); }
+    .download-card:hover::after {
+      transform: scale(1.45);
+    }
 
     .release-label {
       align-items: center;
@@ -400,7 +472,11 @@
       width: 6px;
     }
 
-    @keyframes pulse { 50% { box-shadow: 0 0 0 5px rgba(167, 199, 177, .12); } }
+    @keyframes pulse {
+      50% {
+        box-shadow: 0 0 0 5px rgba(167, 199, 177, .12);
+      }
+    }
 
     .download-card h2 {
       font: 400 clamp(2.4rem, 4vw, 3.6rem)/1 var(--serif);
@@ -408,7 +484,11 @@
       margin: 1.5rem 0 .4rem;
     }
 
-    .release-meta { color: var(--muted); font-size: .86rem; margin: 0; }
+    .release-meta {
+      color: var(--muted);
+      font-size: .86rem;
+      margin: 0;
+    }
 
     .download-button {
       align-items: center;
@@ -433,10 +513,20 @@
       transform: translateY(-2px);
     }
 
-    .download-button span:last-child { font-size: 1.2rem; transition: transform .25s ease; }
-    .download-button:hover span:last-child { transform: translateX(4px); }
+    .download-button span:last-child {
+      font-size: 1.2rem;
+      transition: transform .25s ease;
+    }
 
-    .download-footnote { color: var(--muted); font-size: .75rem; margin: .9rem 0 0; }
+    .download-button:hover span:last-child {
+      transform: translateX(4px);
+    }
+
+    .download-footnote {
+      color: var(--muted);
+      font-size: .75rem;
+      margin: .9rem 0 0;
+    }
 
     .hyperion-details {
       border-top: 1px solid var(--line);
@@ -455,13 +545,31 @@
       text-transform: uppercase;
     }
 
-    .hyperion-details p { color: var(--muted); font-size: .86rem; margin: 0; }
+    .hyperion-details p {
+      color: var(--muted);
+      font-size: .86rem;
+      margin: 0;
+    }
 
-    .mixer-panel { max-width: 1120px; padding-left: 1rem; padding-right: 1rem; }
+    .mixer-panel {
+      max-width: 1120px;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
 
-    .mixer-heading { padding: 0 1rem 1.4rem; }
-    .mixer-heading h1 { font: 400 clamp(2.3rem, 5vw, 4rem)/1.1 var(--serif); margin: 0; }
-    .mixer-heading p { color: var(--muted); margin: .5rem 0 0; }
+    .mixer-heading {
+      padding: 0 1rem 1.4rem;
+    }
+
+    .mixer-heading h1 {
+      font: 400 clamp(2.3rem, 5vw, 4rem)/1.1 var(--serif);
+      margin: 0;
+    }
+
+    .mixer-heading p {
+      color: var(--muted);
+      margin: .5rem 0 0;
+    }
 
     .mixer-frame {
       background: #f1f5f9;
@@ -495,9 +603,17 @@
       will-change: opacity, transform, filter;
     }
 
-    .reveal[data-reveal="left"] { transform: translate3d(-38px, 12px, 0); }
-    .reveal[data-reveal="right"] { transform: translate3d(38px, 12px, 0); }
-    .reveal[data-reveal="scale"] { transform: translate3d(0, 20px, 0) scale(.96); }
+    .reveal[data-reveal="left"] {
+      transform: translate3d(-38px, 12px, 0);
+    }
+
+    .reveal[data-reveal="right"] {
+      transform: translate3d(38px, 12px, 0);
+    }
+
+    .reveal[data-reveal="scale"] {
+      transform: translate3d(0, 20px, 0) scale(.96);
+    }
 
     .reveal.is-visible {
       filter: blur(0);
@@ -516,53 +632,183 @@
       will-change: auto;
     }
 
-    .motion-off .tab-indicator { transition: none; }
-    .motion-off .scroll-progress { display: none; }
-    .motion-off body::before { opacity: .2; transform: none; transition: none; will-change: auto; }
+    .motion-off .tab-indicator {
+      transition: none;
+    }
 
-    .quiet-columns article:nth-child(2) { transition-delay: .12s; }
-    .quiet-columns article:nth-child(3) { transition-delay: .24s; }
-    .hyperion-grid > :nth-child(2) { transition-delay: .14s; }
-    .hyperion-details > :nth-child(2) { transition-delay: .14s; }
+    .motion-off .scroll-progress {
+      display: none;
+    }
+
+    .motion-off body::before {
+      opacity: .2;
+      transform: none;
+      transition: none;
+      will-change: auto;
+    }
+
+    .quiet-columns article:nth-child(2) {
+      transition-delay: .12s;
+    }
+
+    .quiet-columns article:nth-child(3) {
+      transition-delay: .24s;
+    }
+
+    .hyperion-grid> :nth-child(2) {
+      transition-delay: .14s;
+    }
+
+    .hyperion-details> :nth-child(2) {
+      transition-delay: .14s;
+    }
 
     @media (max-width: 760px) {
-      .site-header { align-items: flex-start; flex-direction: column; gap: .9rem; padding: 1rem 1.2rem; }
-      .tabs { align-self: stretch; justify-content: space-between; }
-      .tab { flex: 1; padding: .55rem .45rem; }
-      .tab-panel { padding: 3.5rem 1.2rem; }
-      .quiet-hero { gap: 2.8rem; grid-template-columns: 1fr; padding: 0 0 4.5rem; }
-      .verse-card { max-width: 400px; }
-      .quiet-columns { gap: 1.5rem; grid-template-columns: 1fr; }
-      .gathering { align-items: flex-start; flex-direction: column; gap: .8rem; margin-top: 2.7rem; padding: 1.4rem; }
-      .hyperion-heading { align-items: flex-start; flex-direction: column; gap: 1rem; }
-      .hyperion-grid { grid-template-columns: 1fr; }
-      .download-card { min-height: 310px; }
-      .hyperion-details { gap: 1.2rem; grid-template-columns: 1fr; }
-      .mixer-panel { padding: 2rem .5rem; }
-      .mixer-heading { padding-left: .5rem; padding-right: .5rem; }
-      .mixer-frame { border-radius: .8rem; }
-      .site-footer { padding-left: 1rem; padding-right: 1rem; }
+      .site-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: .9rem;
+        padding: 1rem 1.2rem;
+      }
+
+      .tabs {
+        align-self: stretch;
+        justify-content: space-between;
+      }
+
+      .tab {
+        flex: 1;
+        padding: .55rem .45rem;
+      }
+
+      .tab-panel {
+        padding: 3.5rem 1.2rem;
+      }
+
+      .quiet-hero {
+        gap: 2.8rem;
+        grid-template-columns: 1fr;
+        padding: 0 0 4.5rem;
+      }
+
+      .verse-card {
+        max-width: 400px;
+      }
+
+      .quiet-columns {
+        gap: 1.5rem;
+        grid-template-columns: 1fr;
+      }
+
+      .gathering {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: .8rem;
+        margin-top: 2.7rem;
+        padding: 1.4rem;
+      }
+
+      .hyperion-heading {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .hyperion-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .download-card {
+        min-height: 310px;
+      }
+
+      .hyperion-details {
+        gap: 1.2rem;
+        grid-template-columns: 1fr;
+      }
+
+      .mixer-panel {
+        padding: 2rem .5rem;
+      }
+
+      .mixer-heading {
+        padding-left: .5rem;
+        padding-right: .5rem;
+      }
+
+      .mixer-frame {
+        border-radius: .8rem;
+      }
+
+      .site-footer {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
     }
 
     @media (max-width: 900px) {
-      .site-header { gap: 1rem; }
-      .tab { padding-left: .75rem; padding-right: .75rem; }
+      .site-header {
+        gap: 1rem;
+      }
+
+      .tab {
+        padding-left: .75rem;
+        padding-right: .75rem;
+      }
     }
 
     @media (max-width: 760px) {
-      .site-header { gap: .9rem; }
-      .header-controls { align-items: center; display: flex; gap: .55rem; width: 100%; }
-      .tabs { flex: 1; }
-      .tab { flex: 1; padding-left: .4rem; padding-right: .4rem; }
-      .header-controls .tabs { min-width: 0; }
-      .motion-toggle { font-size: 0; min-height: 38px; min-width: 38px; justify-content: center; padding: .7rem; }
-      .motion-toggle::before { height: 8px; width: 8px; }
-      .site-header .wordmark { align-self: flex-start; }
-      .tab-indicator { transition-duration: .45s; }
+      .site-header {
+        gap: .9rem;
+      }
+
+      .header-controls {
+        align-items: center;
+        display: flex;
+        gap: .55rem;
+        width: 100%;
+      }
+
+      .tabs {
+        flex: 1;
+      }
+
+      .tab {
+        flex: 1;
+        padding-left: .4rem;
+        padding-right: .4rem;
+      }
+
+      .header-controls .tabs {
+        min-width: 0;
+      }
+
+      .motion-toggle {
+        font-size: 0;
+        min-height: 38px;
+        min-width: 38px;
+        justify-content: center;
+        padding: .7rem;
+      }
+
+      .motion-toggle::before {
+        height: 8px;
+        width: 8px;
+      }
+
+      .site-header .wordmark {
+        align-self: flex-start;
+      }
+
+      .tab-indicator {
+        transition-duration: .45s;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      html.motion-off { scroll-behavior: auto; }
+      html.motion-off {
+        scroll-behavior: auto;
+      }
     }
   </style>
 </head>
@@ -570,15 +816,20 @@
 <body>
   <div class="scroll-progress" aria-hidden="true"><span></span></div>
   <header class="site-header">
-    <a class="wordmark" href="#quiet" aria-label="The Quiet Place Initiative home">Quiet Place <span>·</span> Digital</a>
+    <a class="wordmark" href="#quiet" aria-label="The Quiet Place Initiative home">Quiet Place <span>·</span>
+      Digital</a>
     <div class="header-controls">
       <nav class="tabs" role="tablist" aria-label="Pages">
         <span class="tab-indicator" aria-hidden="true"></span>
-        <button class="tab" id="tab-quiet" role="tab" aria-selected="true" aria-controls="panel-quiet" tabindex="0" data-page="quiet">Quiet Place</button>
-        <button class="tab" id="tab-hyperion" role="tab" aria-selected="false" aria-controls="panel-hyperion" tabindex="-1" data-page="hyperion">Hyperion</button>
-        <button class="tab" id="tab-mixer" role="tab" aria-selected="false" aria-controls="panel-mixer" tabindex="-1" data-page="mixer">Mixer</button>
+        <button class="tab" id="tab-quiet" role="tab" aria-selected="true" aria-controls="panel-quiet" tabindex="0"
+          data-page="quiet">Quiet Place</button>
+        <button class="tab" id="tab-hyperion" role="tab" aria-selected="false" aria-controls="panel-hyperion"
+          tabindex="-1" data-page="hyperion">Hyperion</button>
+        <button class="tab" id="tab-mixer" role="tab" aria-selected="false" aria-controls="panel-mixer" tabindex="-1"
+          data-page="mixer">Mixer</button>
       </nav>
-      <button class="motion-toggle" id="motion-toggle" type="button" aria-pressed="true" aria-label="Turn animations off">Motion on</button>
+      <button class="motion-toggle" id="motion-toggle" type="button" aria-pressed="true"
+        aria-label="Turn animations off">Motion on</button>
     </div>
   </header>
 
@@ -588,8 +839,11 @@
         <div>
           <p class="eyebrow">The Quiet Place Initiative · A contemplative Christian community</p>
           <h1 class="quiet-title">Make room for <em>stillness.</em><br>Find space for grace.</h1>
-          <p class="quiet-intro">Inspired by the Christian tradition, we make room to pause, pray, and reconnect with God and one another. Come as you are—with faith, questions, or simply a need for quiet.</p>
-          <p class="belief-note">We are an organization founded on Protestant Christian beliefs. We may draw on the Bible from time to time, but nothing is imposed on anyone. All are welcome, wherever they are on their own path.</p>
+          <p class="quiet-intro">Inspired by the Christian tradition, we make room to pause, pray, and reconnect with
+            God and one another. Come as you are—with faith, questions, or simply a need for quiet.</p>
+          <p class="belief-note">We are an organization founded on Protestant Christian beliefs. We may draw on the
+            Bible from time to time, but nothing is imposed on anyone. All are welcome, wherever they are on their own
+            path.</p>
         </div>
         <figure class="verse-card reveal" data-reveal="right">
           <blockquote>“Be still, and know that I am God.”</blockquote>
@@ -603,17 +857,20 @@
         <article class="reveal" data-reveal="left">
           <p class="eyebrow">01 · What we value</p>
           <h2>Grace for the journey</h2>
-          <p>We draw on the hope of the Gospel and the wisdom of Scripture, while making room for honest questions, different experiences, and each person's own path of faith.</p>
+          <p>We draw on the hope of the Gospel and the wisdom of Scripture, while making room for honest questions,
+            different experiences, and each person's own path of faith.</p>
         </article>
         <article class="reveal" data-reveal="scale">
           <p class="eyebrow">02 · How we gather</p>
           <h2>Prayer, song, and stillness</h2>
-          <p>Our gatherings bring together simple prayer, Scripture, music, and unhurried conversation. Take part in a way that feels comfortable; quiet presence is welcome, too.</p>
+          <p>Our gatherings bring together simple prayer, Scripture, music, and unhurried conversation. Take part in a
+            way that feels comfortable; quiet presence is welcome, too.</p>
         </article>
         <article class="reveal" data-reveal="right">
           <p class="eyebrow">03 · Why we are here</p>
           <h2>Care beyond ourselves</h2>
-          <p>Following the example of Christ, we seek to listen with care, build genuine connections, and carry compassion into the everyday life of our neighbors.</p>
+          <p>Following the example of Christ, we seek to listen with care, build genuine connections, and carry
+            compassion into the everyday life of our neighbors.</p>
         </article>
       </div>
 
@@ -621,7 +878,8 @@
         <div>
           <p class="eyebrow">Coming soon</p>
           <h2>A little space to breathe. A community to call home.</h2>
-          <p>We are creating a welcoming place for prayer, reflection, and connection. More details about our community and gatherings will be shared soon.</p>
+          <p>We are creating a welcoming place for prayer, reflection, and connection. More details about our community
+            and gatherings will be shared soon.</p>
         </div>
         <span class="text-link" aria-label="Coming soon">Coming soon</span>
       </aside>
@@ -638,7 +896,7 @@
 
       <div class="hyperion-grid">
         <div class="video-frame reveal" data-reveal="left">
-          <iframe src="https://www.youtube.com/embed/vCrMwjD7HhU" title="Hyperion MIDI player demo" loading="lazy"
+          <iframe src="https://www.youtube.com/embed/FCvUX8VH-xE" title="Hyperion MIDI player demo" loading="lazy"
             referrerpolicy="strict-origin-when-cross-origin"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen></iframe>
@@ -677,11 +935,13 @@
         <h1>CMYW Color Mixer</h1>
         <p>Blend cyan, magenta, yellow, and white with the palette, sliders, or a HEX value.</p>
       </div>
-      <iframe class="mixer-frame reveal" data-reveal="scale" id="mixer-frame" title="CMYW Color Mixer" data-src="Mixer.html" loading="lazy"></iframe>
+      <iframe class="mixer-frame reveal" data-reveal="scale" id="mixer-frame" title="CMYW Color Mixer"
+        data-src="Mixer.html" loading="lazy"></iframe>
     </section>
   </main>
 
-  <footer class="site-footer">A place for faith and reflection, a player for music, and a little color for the day.</footer>
+  <footer class="site-footer">A place for faith and reflection, a player for music, and a little color for the day.
+  </footer>
 
   <script>
     const tabs = [...document.querySelectorAll('[role="tab"]')];
